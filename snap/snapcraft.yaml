@@ -30,6 +30,12 @@ layout:
   /etc/mysqlrouter:
     symlink: $SNAP_COMMON
 
+hooks:
+  configure:
+    plugs:
+      - network
+      - network-bind
+
 apps:
   mysql:
     command: usr/bin/mysql
@@ -52,16 +58,10 @@ apps:
       - network-bind
   mysqldumpslow:
     command: usr/bin/mysqldumpslow
-  mysqlrepair:
-    command: usr/bin/mysqlrepair
   mysql-ssl-rsa-setup:
     command: usr/bin/mysql_ssl_rsa_setup
-  mysqlanalyze:
-    command: usr/bin/mysqlanalyze
   mysqlimport:
     command: usr/bin/mysqlimport
-  mysqlreport:
-    command: usr/bin/mysqlreport
   mysql-tzinfo-to-sql:
     command: usr/bin/mysql_tzinfo_to_sql
   mysqlbinlog:
@@ -74,8 +74,6 @@ apps:
     command: usr/bin/mysql_upgrade
   mysqlcheck:
     command: usr/bin/mysqlcheck
-  mysqloptimize:
-    command: usr/bin/mysqloptimize
   mysqlshow:
     command: usr/bin/mysqlshow
   mysqlrouter:
@@ -93,16 +91,70 @@ apps:
     command: usr/bin/mysqlrouter_keyring
   mysqlrouter-plugin-info:
     command: usr/bin/mysqlrouter_plugin_info
+  xtrabackup:
+    command: usr/bin/xtrabackup
+    plugs:
+      - network
+      - removable-media
+      - home
+      - mysql-data
+  xbcloud:
+    command: usr/bin/xbcloud
+    plugs:
+      - network
+      - removable-media
+      - home
+  xbcloud-osenv:
+    command: usr/bin/xbcloud_osenv
+    plugs:
+      - network
+      - removable-media
+      - home
+  xbcrypt:
+    command: usr/bin/xbcrypt
+    plugs:
+      - network
+      - removable-media
+      - home
+  xbstream:
+    command: usr/bin/xbstream
+    plugs:
+      - network
+      - removable-media
+      - home
 
 parts:
-  mysql-server-deb:
+  mysql-repo:
     plugin: nil
+    override-pull: |
+      export DEBIAN_FRONTEND=noninteractive
+      export CONFIG_VERSION="0.8.22-1"
+      apt-get update
+      apt-get install -y wget lsb-release gnupg
+      wget -q https://dev.mysql.com/get/mysql-apt-config_${CONFIG_VERSION}_all.deb \
+        -O /tmp/mysql-apt-config_${CONFIG_VERSION}_all.deb
+      dpkg -i /tmp/mysql-apt-config_${CONFIG_VERSION}_all.deb
+      apt-get update
+  percona-repo:
+    plugin: nil
+    override-pull: |
+      export DEBIAN_FRONTEND=noninteractive
+      apt-get update
+      apt-get install -y wget lsb-release
+      wget https://repo.percona.com/apt/percona-release_latest.$(lsb_release -sc)_all.deb
+      dpkg -i percona-release_latest.$(lsb_release -sc)_all.deb
+      apt-get update
+  packages-deb:
+    plugin: nil
+    after:
+      - mysql-repo
+      - percona-repo
     stage-packages:
-      - mysql-server-8.0
+      - mysql-server
       - mysql-router
+      - mysql-shell
+      - percona-xtrabackup-80
       - util-linux
-    stage-snaps:
-      - xtrabackup
   wrapper:
     plugin: dump
     source: snap/local
