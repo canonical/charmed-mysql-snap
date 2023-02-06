@@ -1,3 +1,5 @@
+#!/bin/bash
+
 export CONFIG_DIR="${SNAP_COMMON}/mysql"
 if [ ! -f "${CONFIG_DIR}/initialized" ]; then
         $SNAP/usr/sbin/mysqld --initialize
