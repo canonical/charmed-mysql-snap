@@ -76,6 +76,8 @@ apps:
     command: usr/bin/mysqlcheck
   mysqlshow:
     command: usr/bin/mysqlshow
+  mysqlsh:
+    command: usr/bin/mysqlsh
   mysqlrouter:
     command: start_mysql_router.sh 
   mysqlrouter-service:
