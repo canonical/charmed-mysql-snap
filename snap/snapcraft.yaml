@@ -99,7 +99,6 @@ apps:
       - network
       - removable-media
       - home
-      - mysql-data
   xbcloud:
     command: usr/bin/xbcloud
     plugs:

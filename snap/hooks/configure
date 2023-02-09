@@ -2,12 +2,13 @@
 
 export CONFIG_DIR="${SNAP_COMMON}/mysql"
 if [ ! -f "${CONFIG_DIR}/initialized" ]; then
-        $SNAP/usr/sbin/mysqld --initialize
         echo "configuration folder ${CONFIG_DIR} does not exist."
         echo "copying default config to ${CONFIG_DIR}"
 
         # Copy over mysql config file
         cp -r $SNAP/etc/mysql $SNAP_COMMON
+
+	mkdir -p $CONFIG_DIR/data
 
         # Change ownership of snap directories to allow snap_daemon to read/write
         chown -R snap_daemon:root $SNAP_DATA
@@ -17,6 +18,12 @@ if [ ! -f "${CONFIG_DIR}/initialized" ]; then
         sed -i "s:/var/run/mysqld/mysqld.sock:$CONFIG_DIR/mysqld.sock:g" $CONFIG_DIR/mysql.conf.d/mysqld.cnf
         sed -i "s:# sock:sock:g" $CONFIG_DIR/mysql.conf.d/mysqld.cnf
         sed -i "s: mysql: snap_daemon:g" $CONFIG_DIR/mysql.conf.d/mysqld.cnf
+	sed -i "s:/var/run/mysqld:$CONFIG_DIR:" $CONFIG_DIR/mysql.conf.d/mysqld.cnf
+	sed -i "s:/var/lib/mysql:$CONFIG_DIR/data:" $CONFIG_DIR/mysql.conf.d/mysqld.cnf
+	sed -i "s:/var/log/mysql:$CONFIG_DIR:" $CONFIG_DIR/mysql.conf.d/mysqld.cnf
+	echo "log_bin_index = $CONFIG_DIR/binlog.index" >> $CONFIG_DIR/mysql.conf.d/mysqld.cnf
+
+	$SNAP/usr/sbin/mysqld --initialize --datadir=$CONFIG_DIR/data --user=snap_daemon
 
         # Create file to indicate initialization has been completed
 	touch $CONFIG_DIR/initialized
