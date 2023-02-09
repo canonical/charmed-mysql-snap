@@ -10,10 +10,6 @@ if [ ! -f "${CONFIG_DIR}/initialized" ]; then
 
 	mkdir -p $CONFIG_DIR/data
 
-        # Change ownership of snap directories to allow snap_daemon to read/write
-        chown -R snap_daemon:root $SNAP_DATA
-        chown -R snap_daemon:root $SNAP_COMMON
-
         # Replace default configuration options to work within the snap environment
         sed -i "s:/var/run/mysqld/mysqld.sock:$CONFIG_DIR/mysqld.sock:g" $CONFIG_DIR/mysql.conf.d/mysqld.cnf
         sed -i "s:# sock:sock:g" $CONFIG_DIR/mysql.conf.d/mysqld.cnf
@@ -24,6 +20,10 @@ if [ ! -f "${CONFIG_DIR}/initialized" ]; then
 	echo "log_bin_index = $CONFIG_DIR/binlog.index" >> $CONFIG_DIR/mysql.conf.d/mysqld.cnf
 
 	$SNAP/usr/sbin/mysqld --initialize --datadir=$CONFIG_DIR/data --user=snap_daemon
+
+	# Change ownership of snap directories to allow snap_daemon to read/write
+        chown -R snap_daemon:root $SNAP_DATA
+        chown -R snap_daemon:root $SNAP_COMMON
 
         # Create file to indicate initialization has been completed
 	touch $CONFIG_DIR/initialized
