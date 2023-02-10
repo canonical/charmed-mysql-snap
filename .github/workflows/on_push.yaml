@@ -1,0 +1,13 @@
+on:
+  push:
+    branches:
+      - '*.*/*'
+  workflow_dispatch:
+    branches:
+      - '*.*/*'
+
+jobs:
+  publish:
+    name: Publish Snap
+    uses: ./.github/workflows/publish.yaml
+    secrets: inherit
