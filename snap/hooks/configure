@@ -28,3 +28,11 @@ if [ ! -f "${CONFIG_DIR}/initialized" ]; then
         # Create file to indicate initialization has been completed
 	touch $CONFIG_DIR/initialized
 fi
+
+# NOTE(wolsen) Normally these would be written out by the
+# snap-helpers write-hooks command, but it writes out a
+# command-chain snapcraft-runner directive which is not
+# recognized in core22. Need to determine if this is a bug
+# or not in the snap-helpers. In the meantime, we'll just
+# write the file directly.
+exec "${SNAP}/bin/snap-helpers-hook" "configure"

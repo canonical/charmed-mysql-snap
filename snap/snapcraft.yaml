@@ -123,7 +123,12 @@ apps:
       - network
       - removable-media
       - home
-
+  mysqld-exporter:
+    command: bin/mysqld_exporter
+    daemon: simple
+    plugs:
+      - network
+      - network-bind
 parts:
   mysql-repo:
     plugin: nil
@@ -159,3 +164,19 @@ parts:
   wrapper:
     plugin: dump
     source: snap/local
+  mysqld-exporter:
+    plugin: go
+    build-snaps:
+      - go
+    source-type: git
+    source: https://github.com/prometheus/mysqld_exporter.git
+    source-tag: "v0.14.0"
+  snap-hooks:
+    source: .
+    plugin: python
+
+  templates:
+    source: templates/
+    plugin: dump
+    organize:
+      '*': templates/
