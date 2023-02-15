@@ -19,7 +19,7 @@ if [ ! -f "${CONFIG_DIR}/initialized" ]; then
 	sed -i "s:/var/log/mysql:$CONFIG_DIR:" $CONFIG_DIR/mysql.conf.d/mysqld.cnf
 	echo "log_bin_index = $CONFIG_DIR/binlog.index" >> $CONFIG_DIR/mysql.conf.d/mysqld.cnf
 
-	$SNAP/usr/sbin/mysqld --initialize-insecure --datadir=$CONFIG_DIR/data --user=snap_daemon
+	$SNAP/usr/sbin/mysqld --initialize --datadir=$CONFIG_DIR/data --user=snap_daemon
 
 	# Change ownership of snap directories to allow snap_daemon to read/write
         chown -R snap_daemon:root $SNAP_DATA
