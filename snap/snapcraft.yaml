@@ -79,9 +79,9 @@ apps:
   mysqlsh:
     command: usr/bin/mysqlsh
   mysqlrouter:
-    command: start_mysql_router.sh 
+    command: start-mysql-router.sh 
   mysqlrouter-service:
-    command: start_mysql_router.sh
+    command: start-mysql-router.sh
     daemon: simple
     install-mode: disable
     plugs:
@@ -124,7 +124,7 @@ apps:
       - removable-media
       - home
   mysqld-exporter:
-    command: bin/mysqld_exporter
+    command: start-mysqld-exporter.sh # bin/mysqld_exporter
     daemon: simple
     plugs:
       - network
@@ -171,12 +171,3 @@ parts:
     source-type: git
     source: https://github.com/prometheus/mysqld_exporter.git
     source-tag: "v0.14.0"
-  snap-hooks:
-    source: .
-    plugin: python
-
-  templates:
-    source: templates/
-    plugin: dump
-    organize:
-      '*': templates/
