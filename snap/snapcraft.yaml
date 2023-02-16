@@ -124,7 +124,7 @@ apps:
       - removable-media
       - home
   mysqld-exporter:
-    command: start-mysqld-exporter.sh # bin/mysqld_exporter
+    command: start-mysqld-exporter.sh
     daemon: simple
     plugs:
       - network
