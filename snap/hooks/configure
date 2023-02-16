@@ -21,6 +21,9 @@ if [ ! -f "${CONFIG_DIR}/initialized" ]; then
 
 	$SNAP/usr/sbin/mysqld --initialize --datadir=$CONFIG_DIR/data --user=snap_daemon
 
+        # Add default client config for exporter
+        sed -i '32s/^/\n[client]\nuser = exporter\npassword = exporterpasswd\nport = 3306\nhost = localhost\n\n/' $CONFIG_DIR/mysql.cnf
+
 	# Change ownership of snap directories to allow snap_daemon to read/write
         chown -R snap_daemon:root $SNAP_DATA
         chown -R snap_daemon:root $SNAP_COMMON
