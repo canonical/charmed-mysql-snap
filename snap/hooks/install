@@ -18,6 +18,7 @@ if [ ! -f "${CONFIG_DIR}/initialized" ]; then
 	sed -i "s:/var/lib/mysql:$CONFIG_DIR/data:" $CONFIG_DIR/mysql.conf.d/mysqld.cnf
 	sed -i "s:/var/log/mysql:$CONFIG_DIR:" $CONFIG_DIR/mysql.conf.d/mysqld.cnf
 	echo "log_bin_index = $CONFIG_DIR/binlog.index" >> $CONFIG_DIR/mysql.conf.d/mysqld.cnf
+	echo "mysqlx_socket = $CONFIG_DIR/mysqlx.sock" >> $CONFIG_DIR/mysql.conf.d/mysqld.cnf
 
 	$SNAP/usr/sbin/mysqld --initialize --datadir=$CONFIG_DIR/data --user=root
 
