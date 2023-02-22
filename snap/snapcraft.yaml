@@ -31,7 +31,7 @@ layout:
     symlink: $SNAP_COMMON
 
 hooks:
-  configure:
+  install:
     plugs:
       - network
       - network-bind
