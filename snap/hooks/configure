@@ -19,16 +19,15 @@ if [ ! -f "${CONFIG_DIR}/initialized" ]; then
 	sed -i "s:/var/log/mysql:$CONFIG_DIR:" $CONFIG_DIR/mysql.conf.d/mysqld.cnf
 	echo "log_bin_index = $CONFIG_DIR/binlog.index" >> $CONFIG_DIR/mysql.conf.d/mysqld.cnf
 
-	$SNAP/usr/sbin/mysqld --initialize --datadir=$CONFIG_DIR/data --user=snap_daemon
+	$SNAP/usr/sbin/mysqld --initialize --datadir=$CONFIG_DIR/data --user=root
 
         # Add default client config for exporter
         sed -i '32s/^/\n[client]\nuser = exporter\npassword = exporterpasswd\nport = 3306\nhost = localhost\n\n/' $CONFIG_DIR/mysql.cnf
 
-	# Change ownership of snap directories to allow snap_daemon to read/write
-        chown -R snap_daemon:root $SNAP_DATA
-        chown -R snap_daemon:root $SNAP_COMMON
-
-        # Create file to indicate initialization has been completed
+	# Create file to indicate initialization has been completed
 	touch $CONFIG_DIR/initialized
-fi
 
+	# Change ownership of snap directories to allow snap_daemon to read/write
+        chown -R 584788:root $SNAP_DATA/*
+        chown -R 584788:root $SNAP_COMMON/*
+fi
