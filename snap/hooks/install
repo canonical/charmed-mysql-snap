@@ -1,35 +1,32 @@
 #!/bin/bash
 
 export CONFIG_DIR="${SNAP_COMMON}/mysql"
-if [ ! -f "${CONFIG_DIR}/initialized" ]; then
-        echo "configuration folder ${CONFIG_DIR} does not exist."
-        echo "copying default config to ${CONFIG_DIR}"
+        
+echo "configuration folder ${CONFIG_DIR} does not exist."
+echo "copying default config to ${CONFIG_DIR}"
 
-        # Copy over mysql config file
-        cp -r $SNAP/etc/mysql $SNAP_COMMON
+# Copy over mysql config file
+cp -r $SNAP/etc/mysql $SNAP_COMMON
 
-	mkdir -p $CONFIG_DIR/data
+mkdir -p $CONFIG_DIR/data
 
-        # Replace default configuration options to work within the snap environment
-        sed -i "s:/var/run/mysqld/mysqld.sock:$CONFIG_DIR/mysqld.sock:g" $CONFIG_DIR/mysql.conf.d/mysqld.cnf
-        sed -i "s:# sock:sock:g" $CONFIG_DIR/mysql.conf.d/mysqld.cnf
-        sed -i "s: mysql: snap_daemon:g" $CONFIG_DIR/mysql.conf.d/mysqld.cnf
-	sed -i "s:/var/run/mysqld:$CONFIG_DIR:g" $CONFIG_DIR/mysql.conf.d/mysqld.cnf
-	sed -i "s:/var/lib/mysql:$CONFIG_DIR/data:g" $CONFIG_DIR/mysql.conf.d/mysqld.cnf
-	sed -i "s:/var/log/mysql:$CONFIG_DIR:g" $CONFIG_DIR/mysql.conf.d/mysqld.cnf
-	sed -i "s:/etc/mysql:$CONFIG_DIR:g" $CONFIG_DIR/mysql.cnf
-	echo "log_bin_index = $CONFIG_DIR/binlog.index" >> $CONFIG_DIR/mysql.conf.d/mysqld.cnf
-	echo "mysqlx_socket = $CONFIG_DIR/mysqlx.sock" >> $CONFIG_DIR/mysql.conf.d/mysqld.cnf
+# Replace default configuration options to work within the snap environment
+sed -i "s:/var/run/mysqld/mysqld.sock:$CONFIG_DIR/mysqld.sock:g" $CONFIG_DIR/mysql.conf.d/mysqld.cnf
+sed -i "s:# sock:sock:g" $CONFIG_DIR/mysql.conf.d/mysqld.cnf
+sed -i "s: mysql: snap_daemon:g" $CONFIG_DIR/mysql.conf.d/mysqld.cnf
+sed -i "s:/var/run/mysqld:$CONFIG_DIR:g" $CONFIG_DIR/mysql.conf.d/mysqld.cnf
+sed -i "s:/var/lib/mysql:$CONFIG_DIR/data:g" $CONFIG_DIR/mysql.conf.d/mysqld.cnf
+sed -i "s:/var/log/mysql:$CONFIG_DIR:g" $CONFIG_DIR/mysql.conf.d/mysqld.cnf
+sed -i "s:/etc/mysql:$CONFIG_DIR:g" $CONFIG_DIR/mysql.cnf
+echo "log_bin_index = $CONFIG_DIR/binlog.index" >> $CONFIG_DIR/mysql.conf.d/mysqld.cnf
+echo "mysqlx_socket = $CONFIG_DIR/mysqlx.sock" >> $CONFIG_DIR/mysql.conf.d/mysqld.cnf
 
-	$SNAP/usr/sbin/mysqld --initialize --datadir=$CONFIG_DIR/data --user=root
+$SNAP/usr/sbin/mysqld --initialize --datadir=$CONFIG_DIR/data --user=root
 
-        # Add default client config for exporter
-        sed -i '32s/^/\n[client]\nuser = exporter\npassword = exporterpasswd\nport = 3306\nhost = localhost\n\n/' $CONFIG_DIR/mysql.cnf
+# Add default client config for exporter
+sed -i '32s/^/\n[client]\nuser = exporter\npassword = exporterpasswd\nport = 3306\nhost = localhost\n\n/' $CONFIG_DIR/mysql.cnf
 
-	# Create file to indicate initialization has been completed
-	touch $CONFIG_DIR/initialized
+# Change ownership of snap directories to allow snap_daemon to read/write
+chown -R 584788:root $SNAP_DATA/*
+chown -R 584788:root $SNAP_COMMON/*
 
-	# Change ownership of snap directories to allow snap_daemon to read/write
-        chown -R 584788:root $SNAP_DATA/*
-        chown -R 584788:root $SNAP_COMMON/*
-fi
