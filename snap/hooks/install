@@ -14,9 +14,10 @@ if [ ! -f "${CONFIG_DIR}/initialized" ]; then
         sed -i "s:/var/run/mysqld/mysqld.sock:$CONFIG_DIR/mysqld.sock:g" $CONFIG_DIR/mysql.conf.d/mysqld.cnf
         sed -i "s:# sock:sock:g" $CONFIG_DIR/mysql.conf.d/mysqld.cnf
         sed -i "s: mysql: snap_daemon:g" $CONFIG_DIR/mysql.conf.d/mysqld.cnf
-	sed -i "s:/var/run/mysqld:$CONFIG_DIR:" $CONFIG_DIR/mysql.conf.d/mysqld.cnf
-	sed -i "s:/var/lib/mysql:$CONFIG_DIR/data:" $CONFIG_DIR/mysql.conf.d/mysqld.cnf
-	sed -i "s:/var/log/mysql:$CONFIG_DIR:" $CONFIG_DIR/mysql.conf.d/mysqld.cnf
+	sed -i "s:/var/run/mysqld:$CONFIG_DIR:g" $CONFIG_DIR/mysql.conf.d/mysqld.cnf
+	sed -i "s:/var/lib/mysql:$CONFIG_DIR/data:g" $CONFIG_DIR/mysql.conf.d/mysqld.cnf
+	sed -i "s:/var/log/mysql:$CONFIG_DIR:g" $CONFIG_DIR/mysql.conf.d/mysqld.cnf
+	sed -i "s:/etc/mysql:$CONFIG_DIR:g" $CONFIG_DIR/mysql.cnf
 	echo "log_bin_index = $CONFIG_DIR/binlog.index" >> $CONFIG_DIR/mysql.conf.d/mysqld.cnf
 	echo "mysqlx_socket = $CONFIG_DIR/mysqlx.sock" >> $CONFIG_DIR/mysql.conf.d/mysqld.cnf
 
