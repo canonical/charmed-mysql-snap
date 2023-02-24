@@ -39,6 +39,8 @@ hooks:
 apps:
   mysql:
     command: usr/bin/mysql
+    plugs:
+      - network
   mysql-config-editor:
     command: usr/bin/mysql_config_editor
   mysqldump:
