@@ -18,7 +18,7 @@ sed -i "s:/var/run/mysqld:$CONFIG_DIR:g" $CONFIG_DIR/mysql.conf.d/mysqld.cnf
 sed -i "s:/var/lib/mysql:$CONFIG_DIR/data:g" $CONFIG_DIR/mysql.conf.d/mysqld.cnf
 sed -i "s:/var/log/mysql:$CONFIG_DIR:g" $CONFIG_DIR/mysql.conf.d/mysqld.cnf
 sed -i "s:/etc/mysql:$CONFIG_DIR:g" $CONFIG_DIR/mysql.cnf
-echo "log_bin_index = $CONFIG_DIR/binlog.index" >> $CONFIG_DIR/mysql.conf.d/mysqld.cnf
+echo "log_bin_index = $CONFIG_DIR/data/binlog.index" >> $CONFIG_DIR/mysql.conf.d/mysqld.cnf
 echo "mysqlx_socket = $CONFIG_DIR/mysqlx.sock" >> $CONFIG_DIR/mysql.conf.d/mysqld.cnf
 
 $SNAP/usr/sbin/mysqld --initialize --datadir=$CONFIG_DIR/data --user=root
