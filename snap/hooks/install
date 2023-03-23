@@ -8,7 +8,6 @@ VAR_LIB=$SNAP_COMMON/var/lib/mysql
 ETC=$SNAP_DATA/etc/mysql
 VAR_RUN=$SNAP_COMMON/var/run/mysqld
 VAR_LOG=$SNAP_COMMON/var/log/mysql
-RUN=$SNAP_COMMON/run/mysqld
 
 # Creating all the needed directories
 mkdir -p $VAR_LIB
@@ -27,7 +26,7 @@ sed -i "s:/var/lib/mysql:$VAR_LIB:g" $MYSQLD_CONFIG
 sed -i "s:/var/log/mysql:$VAR_LOG:g" $MYSQLD_CONFIG
 sed -i "s:/etc/mysql:$SNAP_DATA/etc/mysql:g" $MYSQL_CONFIG
 echo "log_bin_index = $VAR_LIB/binlog.index" >> $MYSQLD_CONFIG
-echo "mysqlx_socket = $RUN/mysqlx.sock" >> $MYSQLD_CONFIG
+echo "mysqlx_socket = $VAR_RUN/mysqlx.sock" >> $MYSQLD_CONFIG
 
 $SNAP/usr/sbin/mysqld --initialize --datadir=$VAR_LIB --user=root
 
