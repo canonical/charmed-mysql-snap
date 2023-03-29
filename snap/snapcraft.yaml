@@ -14,6 +14,23 @@ confinement: strict # use 'strict' once you have the right plugs and slots
 system-usernames:
   snap_daemon: shared
 
+package-repositories:
+  - type: apt
+    components: [mysql-8.0]
+    suites: [jammy]
+    key-id: 859BE8D7C586F538430B19C2467B942D3A79BD29
+    url: http://repo.mysql.com/apt/ubuntu/
+  - type: apt
+    components: [mysql-tools]
+    suites: [jammy]
+    key-id: 859BE8D7C586F538430B19C2467B942D3A79BD29
+    url: http://repo.mysql.com/apt/ubuntu/
+  - type: apt
+    components: [main]
+    suites: [jammy]
+    key-id: 4D1BB29D63D98E422B2113B19334A25F8507EFA5
+    url: http://repo.percona.com/percona/apt
+
 layout:
   /var/lib/mysql-files: 
     bind: $SNAP_DATA/var/lib/mysql-files
@@ -134,31 +151,8 @@ apps:
       - network
       - network-bind
 parts:
-  mysql-repo:
-    plugin: nil
-    override-pull: |
-      export DEBIAN_FRONTEND=noninteractive
-      export CONFIG_VERSION="0.8.22-1"
-      apt-get update
-      apt-get install -y wget lsb-release gnupg
-      wget -q https://dev.mysql.com/get/mysql-apt-config_${CONFIG_VERSION}_all.deb \
-        -O /tmp/mysql-apt-config_${CONFIG_VERSION}_all.deb
-      dpkg -i /tmp/mysql-apt-config_${CONFIG_VERSION}_all.deb
-      apt-get update
-  percona-repo:
-    plugin: nil
-    override-pull: |
-      export DEBIAN_FRONTEND=noninteractive
-      apt-get update
-      apt-get install -y wget lsb-release
-      wget https://repo.percona.com/apt/percona-release_latest.$(lsb_release -sc)_all.deb
-      dpkg -i percona-release_latest.$(lsb_release -sc)_all.deb
-      apt-get update
   packages-deb:
     plugin: nil
-    after:
-      - mysql-repo
-      - percona-repo
     stage-packages:
       - mysql-server
       - mysql-router
