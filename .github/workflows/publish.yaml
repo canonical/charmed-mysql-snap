@@ -1,20 +1,26 @@
 on:
+  push:
+    branches:
+      - '[0-9].[0-9]/[a-z]+'
   workflow_call:
   workflow_dispatch:
 
 jobs:
+  build:
+    uses: ./.github/workflows/build.yaml
   publish:
+    name: Publish Snap
     runs-on: ubuntu-latest
+    needs: build
     timeout-minutes: 15
     steps:
-      - name: 'Foresight: Collect workflow telemetry'
-        uses: runforesight/foresight-workflow-kit-action@v1
       - uses: actions/checkout@v3
-      - uses: snapcore/action-build@v1
-        id: build
+      - uses: actions/download-artifact@v3
+        with:
+          name: snap-artifact
       - uses: snapcore/action-publish@v1
         env:
           SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.STORE_LOGIN }}
         with:
-          snap: ${{ steps.build.outputs.snap }}
+          snap: charmed-*_*_amd64.snap
           release: ${{ github.ref_name }}
