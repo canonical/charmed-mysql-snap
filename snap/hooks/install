@@ -20,6 +20,8 @@ cp -r $SNAP/etc/mysql $SNAP_DATA/etc/
 
 # Replace default configuration options to work within the snap environment
 sed -i "s:# sock:sock:g" $MYSQLD_CONFIG
+sed -i "s:# datadir:datadir:g" $MYSQLD_CONFIG
+sed -i "s:# pid-file:pid-file:g" $MYSQLD_CONFIG
 sed -i "s: mysql: snap_daemon:g" $MYSQLD_CONFIG
 sed -i "s:/var/run/mysqld:$VAR_RUN:g" $MYSQLD_CONFIG
 sed -i "s:/var/lib/mysql:$VAR_LIB:g" $MYSQLD_CONFIG
