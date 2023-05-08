@@ -33,5 +33,5 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: snapcraft-release-logs
-          path: ~/.local/state/charmcraft/log/
+          path: ~/.local/state/snapcraft/log/
           if-no-files-found: error
