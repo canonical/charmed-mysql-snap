@@ -20,9 +20,18 @@ jobs:
           name: snap-artifact
       - id: get-snap-name
         run: echo "SNAP_FILE=$(ls *.snap)" >> $GITHUB_OUTPUT
-      - uses: snapcore/action-publish@v1
+      - name: Publish snap
+        id: publish
+        uses: snapcore/action-publish@v1
         env:
           SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.STORE_LOGIN }}
         with:
           snap: ${{ steps.get-snap-name.outputs.SNAP_FILE }}
           release: ${{ github.ref_name }}
+      - name: Upload snapcraft logs
+        if: ${{ failure() && steps.publish.outcome == 'failure' }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: snapcraft-release-logs
+          path: ~/.local/state/snapcraft/log/
+          if-no-files-found: error
