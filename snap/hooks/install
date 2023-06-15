@@ -46,3 +46,7 @@ $SNAP/usr/sbin/mysqld --initialize --datadir=$MYSQL_VAR_LIB --user=root
 # Change ownership of snap directories to allow snap_daemon to read/write
 chown -R 584788:root $SNAP_DATA/*
 chown -R 584788:root $SNAP_COMMON/*
+chown 584788:584788 $MYSQL_ROUTER_ETC
+chown 584788:584788 $MYSQL_ROUTER_VAR_LIB
+chown 584788:584788 $MYSQL_ROUTER_VAR_LOG
+chown 584788:584788 $MYSQL_ROUTER_VAR_RUN
