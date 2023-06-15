@@ -83,7 +83,7 @@ apps:
       - network
       - network-bind
   mysqlsh:
-    command: usr/bin/mysqlsh
+    command: run-mysqlsh.sh
     plugs:
       - network
   mysqlrouter:
