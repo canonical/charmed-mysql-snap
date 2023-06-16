@@ -45,6 +45,8 @@ layout:
     bind: $SNAP_DATA/var/lib/mysqlrouter
   /var/log/mysqlrouter:
     bind: $SNAP_COMMON/var/log/mysqlrouter
+  /var/log/mysqlsh:
+    bind: $SNAP_COMMON/var/log/mysqlsh
   /usr/lib/mysqlsh:
     bind: $SNAP/lib/mysqlsh
 
