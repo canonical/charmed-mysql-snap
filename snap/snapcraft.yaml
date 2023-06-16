@@ -42,7 +42,7 @@ layout:
   /etc/mysqlrouter:
     bind: $SNAP_DATA/etc/mysqlrouter
   /var/lib/mysqlrouter:
-    bind: $SNAP_COMMON/var/lib/mysqlrouter
+    bind: $SNAP_DATA/var/lib/mysqlrouter
   /var/log/mysqlrouter:
     bind: $SNAP_COMMON/var/log/mysqlrouter
   /usr/lib/mysqlsh:
