@@ -20,7 +20,7 @@ package-repositories:
       - main
     suites:
       - jammy
-    key-id: 630239CC130E1A7FD81A27B140976EAF437D05B5
+    key-id: F6ECB3762474EDA9D21B7022871920D1991BC93C
     url: http://security.ubuntu.com/ubuntu/
   - type: apt
     ppa: data-platform/mysql-shell
