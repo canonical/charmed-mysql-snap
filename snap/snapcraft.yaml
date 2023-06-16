@@ -23,6 +23,8 @@ package-repositories:
     key-id: 630239CC130E1A7FD81A27B140976EAF437D05B5
     url: http://security.ubuntu.com/ubuntu/
   - type: apt
+    ppa: data-platform/mysql-shell
+  - type: apt
     components:
       - main
     suites:
@@ -116,19 +118,12 @@ parts:
       printf "Package: mysql-server-8.0\nPin: version 8.0.32*\nPin-Priority: 1001\n" > /etc/apt/preferences.d/mysql
       printf "\nPackage: mysql-router\nPin: version 8.0.32*\nPin-Priority: 1001\n" >> /etc/apt/preferences.d/mysql
       printf "\nPackage: percona-xtrabackup-80\nPin: version 8.0.32*\nPin-Priority: 1001\n" >> /etc/apt/preferences.d/mysql
-  package-mysql-shell:
-    plugin: dump
-    source: https://downloads.mysql.com/archives/get/p/43/file/mysql-shell-8.0.32-linux-glibc2.12-x86-64bit.tar.gz
-    organize:
-      bin: usr/bin
-      libexec: usr/libexec
-      lib: usr/lib
-      share: usr/share
   packages-deb:
     plugin: nil
     stage-packages:
       - mysql-server-8.0
       - mysql-router
+      - mysql-shell
       - percona-xtrabackup-80
       - util-linux
     after:
