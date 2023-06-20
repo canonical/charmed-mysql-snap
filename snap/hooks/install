@@ -15,6 +15,9 @@ MYSQL_ROUTER_VAR_LIB=$SNAP_COMMON/var/lib/mysqlrouter
 MYSQL_ROUTER_VAR_LOG=$SNAP_COMMON/var/log/mysqlrouter
 MYSQL_ROUTER_RUN=$SNAP_COMMON/run/mysqlrouter
 
+MYSQL_SHELL_VAR_LOG=$SNAP_COMMON/var/log/mysqlsh
+MYSQL_SHELL_USER_CONFIG=/tmp/mysqlsh
+
 # Creating all the needed directories
 mkdir -p $MYSQL_ETC
 mkdir -p $MYSQL_VAR_LIB
@@ -25,6 +28,9 @@ mkdir -p $MYSQL_ROUTER_ETC
 mkdir -p $MYSQL_ROUTER_VAR_LIB
 mkdir -p $MYSQL_ROUTER_VAR_LOG
 mkdir -p $MYSQL_ROUTER_RUN
+
+mkdir -p $MYSQL_SHELL_VAR_LOG
+mkdir -p $MYSQL_SHELL_USER_CONFIG
 
 # Copy over mysql config file
 cp -r $SNAP/etc/mysql $SNAP_DATA/etc/
@@ -46,3 +52,9 @@ $SNAP/usr/sbin/mysqld --initialize --datadir=$MYSQL_VAR_LIB --user=root
 # Change ownership of snap directories to allow snap_daemon to read/write
 chown -R 584788:root $SNAP_DATA/*
 chown -R 584788:root $SNAP_COMMON/*
+chown 584788:584788 $MYSQL_ROUTER_ETC
+chown 584788:584788 $MYSQL_ROUTER_VAR_LIB
+chown 584788:584788 $MYSQL_ROUTER_VAR_LOG
+chown 584788:584788 $MYSQL_ROUTER_RUN
+chown 584788:584788 $MYSQL_SHELL_VAR_LOG
+chown 584788:584788 $MYSQL_SHELL_USER_CONFIG
