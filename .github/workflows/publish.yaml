@@ -7,7 +7,9 @@ on:
 
 jobs:
   build:
-    uses: ./.github/workflows/build.yaml
+    name: Build snap
+    uses: canonical/data-platform-workflows/.github/workflows/build_snap_without_cache.yaml@v2
+
   publish:
     name: Publish Snap
     runs-on: ubuntu-latest
@@ -17,7 +19,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/download-artifact@v3
         with:
-          name: snap-artifact
+          name: ${{ needs.build.outputs.artifact-name }}
       - id: get-snap-name
         run: echo "SNAP_FILE=$(ls *.snap)" >> $GITHUB_OUTPUT
       - name: Publish snap
