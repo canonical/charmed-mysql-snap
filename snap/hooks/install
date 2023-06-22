@@ -11,7 +11,7 @@ MYSQL_VAR_LOG=$SNAP_COMMON/var/log/mysql
 MYSQLD_VAR_RUN=$SNAP_COMMON/var/run/mysqld
 
 MYSQL_ROUTER_ETC=$SNAP_DATA/etc/mysqlrouter
-MYSQL_ROUTER_VAR_LIB=$SNAP_COMMON/var/lib/mysqlrouter
+MYSQL_ROUTER_VAR_LIB=$SNAP_DATA/var/lib/mysqlrouter
 MYSQL_ROUTER_VAR_LOG=$SNAP_COMMON/var/log/mysqlrouter
 MYSQL_ROUTER_RUN=$SNAP_COMMON/run/mysqlrouter
 
