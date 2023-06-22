@@ -40,11 +40,11 @@ layout:
   /usr/lib/mysql-router:
     symlink: $SNAP/usr/lib/mysql-router
   /etc/mysqlrouter:
-    bind: $SNAP_DATA/etc/mysqlrouter
+    symlink: $SNAP_DATA/etc/mysqlrouter
   /var/lib/mysqlrouter:
-    bind: $SNAP_DATA/var/lib/mysqlrouter
+    symlink: $SNAP_DATA/var/lib/mysqlrouter
   /var/log/mysqlrouter:
-    bind: $SNAP_COMMON/var/log/mysqlrouter
+    symlink: $SNAP_COMMON/var/log/mysqlrouter
   /var/log/mysqlsh:
     bind: $SNAP_COMMON/var/log/mysqlsh
   /usr/lib/mysqlsh:
