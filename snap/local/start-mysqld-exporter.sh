@@ -12,7 +12,7 @@ EXPORTER_OPTS="--no-collect.binlog_size \
 --no-collect.perf_schema.tableiowaits \
 --no-collect.perf_schema.tablelocks \
 --no-collect.auto_increment.columns"
-EXPORTER_PATH="/usr/bin/mysqld_exporter"
+EXPORTER_PATH="/usr/bin/prometheus-mysqld-exporter"
 SOCKET="/var/run/mysqld/mysqld.sock"
 
 if [ -z "$SNAP" ]; then
