@@ -114,23 +114,16 @@ apps:
       - network
       - network-bind
 parts:
-  pin-mysql-apt:
-    plugin: nil
-    override-pull: |
-      printf "Package: mysql-server-8.0\nPin: version 8.0.33*\nPin-Priority: 1001\n" > /etc/apt/preferences.d/mysql
-      printf "\nPackage: mysql-router\nPin: version 8.0.33*\nPin-Priority: 1001\n" >> /etc/apt/preferences.d/mysql
   packages-deb:
     plugin: nil
     stage-packages:
-      - mysql-server-8.0
-      - mysql-router
-      - mysql-shell
-      - prometheus-mysqld-exporter
-      - prometheus-mysqlrouter-exporter
-      - xtrabackup
+      - mysql-server-8.0=8.0.33-0ubuntu0.22.04.4
+      - mysql-router=8.0.33-0ubuntu0.22.04.4
+      - mysql-shell=8.0.33-0ubuntu0.22.04.1~ppa3
+      - prometheus-mysqld-exporter=0.14.0-0ubuntu0.22.04.1~ppa1
+      - prometheus-mysqlrouter-exporter=4.0.5-0ubuntu0.22.04.1~ppa1
+      - xtrabackup=8.0.33-27-0ubuntu0.22.04.1~ppa1
       - util-linux
-    after:
-      - pin-mysql-apt
   wrapper:
     plugin: dump
     source: snap/local
