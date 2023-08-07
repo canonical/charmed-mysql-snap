@@ -17,7 +17,7 @@ jobs:
         run: |
           SNAP_VERSION=$(yq .version snap/snapcraft.yaml)
           APT_VERSION=$(apt info mysql-server | grep Version | cut -c10-)
-          APT_VERSION=${APT_VERSION::-15}
+          APT_VERSION=${APT_VERSION::-17}
           if [ "$SNAP_VERSION" != "$APT_VERSION" ]; then
               echo "VERSION MISMATCH DETECTED"
               echo "Snap version: $SNAP_VERSION"
