@@ -8,16 +8,14 @@ jobs:
     runs-on: ubuntu-22.04
     timeout-minutes: 15
     steps:
-      - name: 'Foresight: Collect workflow telemetry'
-        uses: runforesight/foresight-workflow-kit-action@v1
       - uses: actions/checkout@v3
       - name: Install yq
         run: sudo snap install yq
       - name: Compare versions
         run: |
           SNAP_VERSION=$(yq .version snap/snapcraft.yaml)
-          APT_VERSION=$(apt info mysql-server | grep Version | cut -c10-)
-          APT_VERSION=${APT_VERSION::-15}
+          APT_VERSION=$(apt-cache show mysql-server-8.0 | grep Version | head -n 1 | cut -c10-)
+          APT_VERSION=${APT_VERSION::-17}
           if [ "$SNAP_VERSION" != "$APT_VERSION" ]; then
               echo "VERSION MISMATCH DETECTED"
               echo "Snap version: $SNAP_VERSION"
