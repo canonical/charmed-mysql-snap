@@ -132,7 +132,7 @@ parts:
       usr/share/doc/prometheus-mysqld-exporter/copyright: licenses/COPYRIGHT-prometheus-mysqld-exporter
       usr/share/doc/prometheus-mysqlrouter-exporter/copyright: licenses/COPYRIGHT-prometheus-mysqlrouter-exporter
       usr/share/doc/xtrabackup/LICENSE.gz: licenses/LICENSE-xtrabackup
-      usr/share/doc/util-linux/copyright: COPYRIGHT-util-linux
+      usr/share/doc/util-linux/copyright: licenses/COPYRIGHT-util-linux
   snap-license:
     plugin: dump
     source: .
