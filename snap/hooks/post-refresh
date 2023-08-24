@@ -1,0 +1,8 @@
+#!/bin/bash
+
+SNAP_DATA=/var/snap/charmed-mysql/current
+
+# Ensure correct permissions on snap refresh
+chown -R 584788:root $SNAP_COMMON
+chown -R 584788:root $SNAP_DATA
+
