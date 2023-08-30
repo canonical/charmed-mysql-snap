@@ -58,6 +58,10 @@ hooks:
   configure:
     plugs:
       - network
+  post-refresh:
+    plugs:
+      - network
+      - network-bind
 
 slots:
   logs:

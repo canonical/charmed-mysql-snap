@@ -1,60 +1,60 @@
-#!/bin/bash
+#!/bin/sh
 
-SNAP_DATA=/var/snap/charmed-mysql/current
+(
+    echo "hook $0" "$*"
+    echo "Setting paths"
+    MYSQL_CONFIG=$SNAP_DATA/etc/mysql/mysql.cnf
+    MYSQLD_CONFIG=$SNAP_DATA/etc/mysql/mysql.conf.d/mysqld.cnf
 
-MYSQL_CONFIG=$SNAP_DATA/etc/mysql/mysql.cnf
-MYSQLD_CONFIG=$SNAP_DATA/etc/mysql/mysql.conf.d/mysqld.cnf
+    MYSQL_ETC=$SNAP_DATA/etc/mysql
+    MYSQL_VAR_LIB=$SNAP_COMMON/var/lib/mysql
+    MYSQL_VAR_LOG=$SNAP_COMMON/var/log/mysql
+    MYSQLD_VAR_RUN=$SNAP_COMMON/var/run/mysqld
 
-MYSQL_ETC=$SNAP_DATA/etc/mysql
-MYSQL_VAR_LIB=$SNAP_COMMON/var/lib/mysql
-MYSQL_VAR_LOG=$SNAP_COMMON/var/log/mysql
-MYSQLD_VAR_RUN=$SNAP_COMMON/var/run/mysqld
+    MYSQL_ROUTER_ETC=$SNAP_DATA/etc/mysqlrouter
+    MYSQL_ROUTER_VAR_LIB=$SNAP_DATA/var/lib/mysqlrouter
+    MYSQL_ROUTER_VAR_LOG=$SNAP_COMMON/var/log/mysqlrouter
+    MYSQL_ROUTER_RUN=$SNAP_COMMON/run/mysqlrouter
 
-MYSQL_ROUTER_ETC=$SNAP_DATA/etc/mysqlrouter
-MYSQL_ROUTER_VAR_LIB=$SNAP_DATA/var/lib/mysqlrouter
-MYSQL_ROUTER_VAR_LOG=$SNAP_COMMON/var/log/mysqlrouter
-MYSQL_ROUTER_RUN=$SNAP_COMMON/run/mysqlrouter
+    MYSQL_SHELL_VAR_LOG=$SNAP_COMMON/var/log/mysqlsh
+    MYSQL_SHELL_USER_CONFIG=/tmp/mysqlsh
 
-MYSQL_SHELL_VAR_LOG=$SNAP_COMMON/var/log/mysqlsh
-MYSQL_SHELL_USER_CONFIG=/tmp/mysqlsh
+    # Creating all the needed directories
+    echo "Creating directories"
+    mkdir -p "$MYSQL_ETC"
+    mkdir -p "$MYSQL_VAR_LIB"
+    mkdir -p "$MYSQL_VAR_LOG"
+    mkdir -p "$MYSQLD_VAR_RUN"
 
-# Creating all the needed directories
-mkdir -p $MYSQL_ETC
-mkdir -p $MYSQL_VAR_LIB
-mkdir -p $MYSQL_VAR_LOG
-mkdir -p $MYSQLD_VAR_RUN
+    mkdir -p "$MYSQL_ROUTER_ETC"
+    mkdir -p "$MYSQL_ROUTER_VAR_LIB"
+    mkdir -p "$MYSQL_ROUTER_VAR_LOG"
+    mkdir -p "$MYSQL_ROUTER_RUN"
 
-mkdir -p $MYSQL_ROUTER_ETC
-mkdir -p $MYSQL_ROUTER_VAR_LIB
-mkdir -p $MYSQL_ROUTER_VAR_LOG
-mkdir -p $MYSQL_ROUTER_RUN
+    mkdir -p "$MYSQL_SHELL_VAR_LOG"
+    mkdir -p "$MYSQL_SHELL_USER_CONFIG"
 
-mkdir -p $MYSQL_SHELL_VAR_LOG
-mkdir -p $MYSQL_SHELL_USER_CONFIG
+    # Copy over mysql config file
+    cp -r "$SNAP"/etc/mysql "$SNAP_DATA"/etc/
 
-# Copy over mysql config file
-cp -r $SNAP/etc/mysql $SNAP_DATA/etc/
+    # Replace default configuration options to work within the snap environment
+    sed -i "s:# sock:sock:g" "$MYSQLD_CONFIG"
+    sed -i "s:# datadir:datadir:g" "$MYSQLD_CONFIG"
+    sed -i "s:# pid-file:pid-file:g" "$MYSQLD_CONFIG"
+    sed -i "s: mysql: snap_daemon:g" "$MYSQLD_CONFIG"
+    sed -i "s:/var/run/mysqld:$MYSQLD_VAR_RUN:g" "$MYSQLD_CONFIG"
+    sed -i "s:/var/lib/mysql:$MYSQL_VAR_LIB:g" "$MYSQLD_CONFIG"
+    sed -i "s:/var/log/mysql:$MYSQL_VAR_LOG:g" "$MYSQLD_CONFIG"
+    sed -i "s:/etc/mysql:$MYSQL_ETC:g" "$MYSQL_CONFIG"
+    echo "log_bin_index = $MYSQL_VAR_LIB/binlog.index" >> "$MYSQLD_CONFIG"
+    echo "mysqlx_socket = $MYSQLD_VAR_RUN/mysqlx.sock" >> "$MYSQLD_CONFIG"
 
-# Replace default configuration options to work within the snap environment
-sed -i "s:# sock:sock:g" $MYSQLD_CONFIG
-sed -i "s:# datadir:datadir:g" $MYSQLD_CONFIG
-sed -i "s:# pid-file:pid-file:g" $MYSQLD_CONFIG
-sed -i "s: mysql: snap_daemon:g" $MYSQLD_CONFIG
-sed -i "s:/var/run/mysqld:$MYSQLD_VAR_RUN:g" $MYSQLD_CONFIG
-sed -i "s:/var/lib/mysql:$MYSQL_VAR_LIB:g" $MYSQLD_CONFIG
-sed -i "s:/var/log/mysql:$MYSQL_VAR_LOG:g" $MYSQLD_CONFIG
-sed -i "s:/etc/mysql:$MYSQL_ETC:g" $MYSQL_CONFIG
-echo "log_bin_index = $MYSQL_VAR_LIB/binlog.index" >> $MYSQLD_CONFIG
-echo "mysqlx_socket = $MYSQLD_VAR_RUN/mysqlx.sock" >> $MYSQLD_CONFIG
+    echo "Initializing mysql database"
+    "$SNAP"/usr/sbin/mysqld --initialize --datadir="$MYSQL_VAR_LIB" --user=root
 
-$SNAP/usr/sbin/mysqld --initialize --datadir=$MYSQL_VAR_LIB --user=root
-
-# Change ownership of snap directories to allow snap_daemon to read/write
-chown -R 584788:root $SNAP_DATA/*
-chown -R 584788:root $SNAP_COMMON/*
-chown 584788:584788 $MYSQL_ROUTER_ETC
-chown 584788:584788 $MYSQL_ROUTER_VAR_LIB
-chown 584788:584788 $MYSQL_ROUTER_VAR_LOG
-chown 584788:584788 $MYSQL_ROUTER_RUN
-chown 584788:584788 $MYSQL_SHELL_VAR_LOG
-chown 584788:584788 $MYSQL_SHELL_USER_CONFIG
+    # Change ownership of snap directories to allow snap_daemon to read/write
+    echo "Set directory ownership"
+    chown -R 584788:584788 "$SNAP_DATA/*"
+    chown -R 584788:584788 "$SNAP_COMMON/*"
+    chown 584788:584788 $MYSQL_SHELL_USER_CONFIG
+) >> /tmp/hook.log
