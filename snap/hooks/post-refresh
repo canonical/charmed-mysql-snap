@@ -1,0 +1,8 @@
+#!/bin/sh
+
+(
+    echo "hook $0" "$*"
+    echo "Ensure correct permissions on snap refresh"
+    chown -R 584788:584788 "$SNAP_COMMON"/*
+    chown -R 584788:584788 "$SNAP_DATA"/*
+) >> /tmp/hook.log

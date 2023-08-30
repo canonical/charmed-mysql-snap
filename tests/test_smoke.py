@@ -57,4 +57,6 @@ def test_all_services():
                 )
                 subprocess.run(f"sudo snap stop {snapcraft['name']}.{app}".split())
 
-                assert "active" == service.stdout.split("\n")[1].split()[2]
+                assert (
+                    "active" == service.stdout.split("\n")[1].split()[2]
+                ), f"Service {app} is not active"
