@@ -54,7 +54,7 @@
 
     # Change ownership of snap directories to allow snap_daemon to read/write
     echo "Set directory ownership"
-    chown -R 584788:584788 "$SNAP_DATA/*"
-    chown -R 584788:584788 "$SNAP_COMMON/*"
+    chown -R 584788:584788 "$SNAP_DATA"/*
+    chown -R 584788:584788 "$SNAP_COMMON"/*
     chown 584788:584788 $MYSQL_SHELL_USER_CONFIG
 ) >> /tmp/hook.log
