@@ -10,21 +10,17 @@ EXPORTER_OPTS="--collect.metadata.status \
 --collect.route.connections.time_last_sent_to_server \
 --collect.route.connections.time_received_from_server"
 EXPORTER_PATH="/usr/bin/mysqlrouter_exporter"
-TLS_OPTS="--skip-tls-verify"
-
-if [ -z "$MYSQLROUTER_EXPORTER_URL" ]; then
-    echo "MYSQLROUTER_EXPORTER_URL must be set"
-    exit 1
-fi
-
-if [[ -n "$MYSQLROUTER_TLS_CACERT_PATH" && -n "$MYSQLROUTER_TLS_CERT_PATH" && -n "$MYSQLROUTER_TLS_KEY_PATH" ]]; then
-    TLS_OPTS=""
-fi
 
 if [ -n "$SNAP" ]; then
     EXPORTER_PATH="${SNAP}${EXPORTER_PATH}"
     MYSQLROUTER_EXPORTER_USER="$(snapctl get mysqlrouter-exporter.user)"
     MYSQLROUTER_EXPORTER_PASS="$(snapctl get mysqlrouter-exporter.password)"
+    MYSQLROUTER_EXPORTER_URL="$(snapctl get mysqlrouter-exporter.url)"
+
+    if [ -z "$MYSQLROUTER_EXPORTER_URL" ]; then
+        echo "mysqlrouter-exporter.url must be set"
+        exit 1
+    fi
 
     if [[ -z "$MYSQLROUTER_EXPORTER_USER" || -z "$MYSQLROUTER_EXPORTER_PASS" ]]; then
         echo "mysqlrouter-exporter.user and mysqlrouter-exporter.password must be set"
@@ -37,8 +33,13 @@ if [ -n "$SNAP" ]; then
         --clear-groups \
         --reuid snap_daemon \
         --regid snap_daemon -- \
-        "$EXPORTER_PATH" $(echo "$EXPORTER_OPTS") $(echo "$TLS_OPTS")
+        "$EXPORTER_PATH" $(echo "$EXPORTER_OPTS")
 else
+    if [ -z "$MYSQLROUTER_EXPORTER_URL" ]; then
+        echo "MYSQLROUTER_EXPORTER_URL must be set"
+        exit 1
+    fi
+
     if [ -z "$MYSQLROUTER_EXPORTER_USER" ]; then
         echo "MYSQLROUTER_EXPORTER_USER must be set"
         exit 1
@@ -47,6 +48,12 @@ else
     if [ -z "$MYSQLROUTER_EXPORTER_PASS" ]; then
         echo "MYSQLROUTER_EXPORTER_PASS must be set"
         exit 1
+    fi
+
+    if [[ -n "$MYSQLROUTER_TLS_CACERT_PATH" && -n "$MYSQLROUTER_TLS_CERT_PATH" && -n "$MYSQLROUTER_TLS_KEY_PATH" ]]; then
+        TLS_OPTS=""
+    else
+        TLS_OPTS="--skip-tls-verify"
     fi
 
     "$EXPORTER_PATH" $(echo "$EXPORTER_OPTS") $(echo "$TLS_OPTS")
