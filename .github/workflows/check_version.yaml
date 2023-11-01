@@ -11,11 +11,12 @@ jobs:
       - uses: actions/checkout@v3
       - name: Install yq
         run: sudo snap install yq
-      - name: Clean apt cache
-        run: sudo apt-get clean
       - name: Compare versions
         run: |
           SNAP_VERSION=$(yq .version snap/snapcraft.yaml)
+          sudo adduser "$USER" lxd
+          sg lxd -c "lxd waitready"
+          sg lxd -c "lxd init --auto"
           lxc launch ubuntu:22.04 temp
           lxc exec temp -- apt-get update
           APT_VERSION=$(lxc exec temp -- apt-cache show mysql-server-8.0 | grep Version | head -n 1 | cut -c10-)
