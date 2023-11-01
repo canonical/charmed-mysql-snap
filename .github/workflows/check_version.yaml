@@ -16,8 +16,11 @@ jobs:
       - name: Compare versions
         run: |
           SNAP_VERSION=$(yq .version snap/snapcraft.yaml)
-          APT_VERSION=$(apt-cache show mysql-server-8.0 | grep Version | head -n 1 | cut -c10-)
+          lxc launch ubuntu:22.04 temp
+          lxc exec temp -- apt-get update
+          APT_VERSION=$(lxc exec temp -- apt-cache show mysql-server-8.0 | grep Version | head -n 1 | cut -c10-)
           APT_VERSION=${APT_VERSION::-17}
+          lxc stop temp && lxc rm temp
           if [ "$SNAP_VERSION" != "$APT_VERSION" ]; then
               echo "VERSION MISMATCH DETECTED"
               echo "Snap version: $SNAP_VERSION"
