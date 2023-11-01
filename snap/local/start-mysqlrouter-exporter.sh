@@ -16,6 +16,7 @@ if [ -n "$SNAP" ]; then
     MYSQLROUTER_EXPORTER_USER="$(snapctl get mysqlrouter-exporter.user)"
     MYSQLROUTER_EXPORTER_PASS="$(snapctl get mysqlrouter-exporter.password)"
     MYSQLROUTER_EXPORTER_URL="$(snapctl get mysqlrouter-exporter.url)"
+    TLS_OPTS="--skip-tls-verify"
 
     if [ -z "$MYSQLROUTER_EXPORTER_URL" ]; then
         echo "mysqlrouter-exporter.url must be set"
@@ -36,7 +37,7 @@ if [ -n "$SNAP" ]; then
         env MYSQLROUTER_EXPORTER_URL="${MYSQLROUTER_EXPORTER_URL}" \
         MYSQLROUTER_EXPORTER_USER="${MYSQLROUTER_EXPORTER_USER}" \
         MYSQLROUTER_EXPORTER_PASS="${MYSQLROUTER_EXPORTER_PASS}" \
-        "$EXPORTER_PATH" $(echo "$EXPORTER_OPTS")
+        "$EXPORTER_PATH" $(echo "$EXPORTER_OPTS") $(echo "$TLS_OPTS")
 else
     if [ -z "$MYSQLROUTER_EXPORTER_URL" ]; then
         echo "MYSQLROUTER_EXPORTER_URL must be set"
