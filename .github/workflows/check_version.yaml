@@ -17,11 +17,13 @@ jobs:
           sudo adduser "$USER" lxd
           sg lxd -c "lxd waitready"
           sg lxd -c "lxd init --auto"
-          sg lxd -c "lxc launch ubuntu:22.04 temp"
-          sg lxd -c "lxc exec temp -- sudo apt-get update"
-          APT_VERSION=$(sg lxd -c "lxc exec temp -- apt-cache show mysql-server-8.0 | grep Version | head -n 1 | cut -c10-")
+          sg lxd -c "lxc launch ubuntu:22.04 jammy"
+          sleep 30
+          sg lxd -c "lxc-wait -n jammy -s RUNNING"
+          sg lxd -c "lxc exec jammy -- sudo apt-get update"
+          APT_VERSION=$(sg lxd -c "lxc exec jammy -- apt-cache show mysql-server-8.0 | grep Version | head -n 1 | cut -c10-")
           APT_VERSION=${APT_VERSION::-17}
-          sg lxd -c "lxc stop temp && lxc rm temp"
+          sg lxd -c "lxc stop jammy && lxc rm jammy"
           if [ "$SNAP_VERSION" != "$APT_VERSION" ]; then
               echo "VERSION MISMATCH DETECTED"
               echo "Snap version: $SNAP_VERSION"
