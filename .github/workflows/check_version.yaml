@@ -18,7 +18,7 @@ jobs:
           sg lxd -c "lxd waitready"
           sg lxd -c "lxd init --auto"
           sg lxd -c "lxc launch ubuntu:22.04 temp"
-          sg lxd -c "lxc exec temp -- apt-get update"
+          sg lxd -c "lxc exec temp -- sudo apt-get update"
           APT_VERSION=$(sg lxd -c "lxc exec temp -- apt-cache show mysql-server-8.0 | grep Version | head -n 1 | cut -c10-")
           APT_VERSION=${APT_VERSION::-17}
           sg lxd -c "lxc stop temp && lxc rm temp"
