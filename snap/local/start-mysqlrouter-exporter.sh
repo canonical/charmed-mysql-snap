@@ -33,6 +33,9 @@ if [ -n "$SNAP" ]; then
         --clear-groups \
         --reuid snap_daemon \
         --regid snap_daemon -- \
+        env MYSQLROUTER_EXPORTER_URL="${MYSQLROUTER_EXPORTER_URL}" \
+        MYSQLROUTER_EXPORTER_USER="${MYSQLROUTER_EXPORTER_USER}" \
+        MYSQLROUTER_EXPORTER_PASS="${MYSQLROUTER_EXPORTER_PASS}" \
         "$EXPORTER_PATH" $(echo "$EXPORTER_OPTS")
 else
     if [ -z "$MYSQLROUTER_EXPORTER_URL" ]; then
