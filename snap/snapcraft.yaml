@@ -65,6 +65,11 @@ slots:
     source:
       read:
         - $SNAP_COMMON/var/log/mysql
+  router-logs:
+    interface: content
+    source:
+      read:
+        - $SNAP_COMMON/var/log/mysqlrouter
   mysqlrouter-sockets:
     interface: content
     content: socket-directory
