@@ -37,7 +37,7 @@ if [ -n "$SNAP" ]; then
         env MYSQLROUTER_EXPORTER_URL="${MYSQLROUTER_EXPORTER_URL}" \
         MYSQLROUTER_EXPORTER_USER="${MYSQLROUTER_EXPORTER_USER}" \
         MYSQLROUTER_EXPORTER_PASS="${MYSQLROUTER_EXPORTER_PASS}" \
-        "$EXPORTER_PATH" "$EXPORTER_OPTS" "$TLS_OPTS"
+        "$EXPORTER_PATH" $(echo "$EXPORTER_OPTS") $(echo "$TLS_OPTS")
 else
     if [ -z "$MYSQLROUTER_EXPORTER_URL" ]; then
         echo "MYSQLROUTER_EXPORTER_URL must be set"
@@ -60,5 +60,5 @@ else
         TLS_OPTS="--skip-tls-verify"
     fi
 
-    "$EXPORTER_PATH" "$EXPORTER_OPTS" "$TLS_OPTS"
+    "$EXPORTER_PATH" $(echo "$EXPORTER_OPTS") $(echo "$TLS_OPTS")
 fi
