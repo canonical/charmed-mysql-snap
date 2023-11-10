@@ -125,6 +125,8 @@ apps:
     plugs:
       - network
       - network-bind
+  mysqlrouter-passwd:
+    command: usr/bin/mysqlrouter_passwd
 
 parts:
   packages-deb:
