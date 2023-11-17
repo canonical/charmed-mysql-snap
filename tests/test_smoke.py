@@ -24,7 +24,7 @@ def test_all_apps():
             "xtrabackup": "--version",
         }
 
-        sudo = ["mysqlrouter", "mysqlsh"]
+        sudo = ["mysqlrouter", "mysqlsh", "mysqlrouter-passwd"]
 
         for app, data in snapcraft["apps"].items():
             if not bool(data.get("daemon")):
