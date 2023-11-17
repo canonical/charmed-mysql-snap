@@ -122,7 +122,7 @@ apps:
       - network
       - network-bind
   mysqlrouter-passwd:
-    command: usr/bin/mysqlrouter_passwd
+    command: run-mysqlrouter-password.sh
 
 parts:
   packages-deb:
