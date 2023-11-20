@@ -115,14 +115,14 @@ apps:
       - network
       - network-bind
   mysqlrouter-exporter:
-    command: start-mysqlrouter-exporter.sh
+    command: start-mysql-router-exporter.sh
     daemon: simple
     install-mode: disable
     plugs:
       - network
       - network-bind
   mysqlrouter-passwd:
-    command: run-mysqlrouter-password.sh
+    command: run-mysql-router-password.sh
 
 parts:
   packages-deb:
