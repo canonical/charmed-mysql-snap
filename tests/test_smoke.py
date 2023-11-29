@@ -24,7 +24,7 @@ def test_all_apps():
             "xtrabackup": "--version",
         }
 
-        sudo = ["mysqlrouter", "mysqlsh"]
+        sudo = ["mysqlrouter", "mysqlsh", "mysqlrouter-passwd"]
 
         for app, data in snapcraft["apps"].items():
             if not bool(data.get("daemon")):
@@ -40,7 +40,7 @@ def test_all_services():
     with open("snap/snapcraft.yaml") as file:
         snapcraft = yaml.safe_load(file)
 
-        skip = ["mysqlrouter-service", "mysqld-exporter"]
+        skip = ["mysqlrouter-service", "mysqld-exporter", "mysqlrouter-exporter"]
 
         for app, data in snapcraft["apps"].items():
             if bool(data.get("daemon")) and app not in skip:
