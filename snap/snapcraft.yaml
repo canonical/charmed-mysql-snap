@@ -133,7 +133,7 @@ parts:
       - mysql-shell=8.0.35-0ubuntu0.22.04.1~ppa1
       - prometheus-mysqld-exporter=0.14.0-0ubuntu0.22.04.1~ppa1
       - prometheus-mysqlrouter-exporter=4.0.5-0ubuntu0.22.04.1~ppa1
-      - xtrabackup=8.0.34-29-0ubuntu0.22.04.1~ppa1
+      - xtrabackup=8.0.35-30-0ubuntu0.22.04.1~ppa1
       - util-linux
     organize:
       usr/share/doc/mysql-server-8.0/copyright: licenses/COPYRIGHT-mysql-server-8.0
