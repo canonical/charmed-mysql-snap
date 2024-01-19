@@ -3,12 +3,12 @@
 set -eo pipefail # Exit on error
 
 EXPORTER_OPTS="--collect.metadata.status \
---collect.route.connections.byte_from_server \
---collect.route.connections.byte_to_server \
---collect.route.connections.time_started \
---collect.route.connections.time_connected_to_server \
---collect.route.connections.time_last_sent_to_server \
---collect.route.connections.time_received_from_server"
+    --collect.route.connections.byte_from_server \
+    --collect.route.connections.byte_to_server \
+    --collect.route.connections.time_started \
+    --collect.route.connections.time_connected_to_server \
+    --collect.route.connections.time_last_sent_to_server \
+    --collect.route.connections.time_received_from_server"
 EXPORTER_PATH="/usr/bin/mysqlrouter_exporter"
 
 if [ -n "$SNAP" ]; then
@@ -37,7 +37,7 @@ if [ -n "$SNAP" ]; then
         env MYSQLROUTER_EXPORTER_URL="${MYSQLROUTER_EXPORTER_URL}" \
         MYSQLROUTER_EXPORTER_USER="${MYSQLROUTER_EXPORTER_USER}" \
         MYSQLROUTER_EXPORTER_PASS="${MYSQLROUTER_EXPORTER_PASS}" \
-        "$EXPORTER_PATH" $(echo "$EXPORTER_OPTS") $(echo "$TLS_OPTS")
+        "$EXPORTER_PATH" "$EXPORTER_OPTS" "$TLS_OPTS"
 else
     if [ -z "$MYSQLROUTER_EXPORTER_URL" ]; then
         echo "MYSQLROUTER_EXPORTER_URL must be set"
@@ -60,5 +60,5 @@ else
         TLS_OPTS="--skip-tls-verify"
     fi
 
-    "$EXPORTER_PATH" $(echo "$EXPORTER_OPTS") $(echo "$TLS_OPTS")
+    "$EXPORTER_PATH" "$EXPORTER_OPTS" "$TLS_OPTS"
 fi
