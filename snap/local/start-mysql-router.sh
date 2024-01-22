@@ -2,7 +2,9 @@
 
 # For security measures, daemons should not be run as sudo.
 # Execute mysqlrouter as the non-sudo user: snap-daemon.
-EXTRA_OPTIONS="$(snapctl get mysqlrouter.extra-options)"
+
+# Retrieve extra options as array
+mapfile -t EXTRA_OPTIONS < <(snapctl get mysqlrouter.extra-options)
 
 exec "${SNAP}/usr/bin/setpriv" \
     --clear-groups \
@@ -11,4 +13,4 @@ exec "${SNAP}/usr/bin/setpriv" \
     -- \
     "${SNAP}/usr/bin/mysqlrouter" \
     --config "${SNAP_DATA}/etc/mysqlrouter/mysqlrouter.conf" \
-    $(echo "${EXTRA_OPTIONS}")
+    "${EXTRA_OPTIONS[@]}"
