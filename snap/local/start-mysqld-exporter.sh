@@ -21,7 +21,7 @@ if [ -z "$SNAP" ]; then
         echo "DATA_SOURCE_NAME must be set"
         exit 1
     fi
-    exec "$EXPORTER_PATH" "$EXPORTER_OPTS"
+    exec "/snap/charmed-mysql/current$EXPORTER_PATH" $(echo "$EXPORTER_OPTS")
 else
     # When running as a snap, expect `exporter.user` and `exporter.password`
     EXPORTER_USER="$(snapctl get exporter.user)"
@@ -42,5 +42,5 @@ else
         --regid snap_daemon \
         -- \
         env DATA_SOURCE_NAME="${EXPORTER_USER}:${EXPORTER_PASS}@unix(${SOCKET})/" \
-        "$EXPORTER_PATH" "$EXPORTER_OPTS"
+        "$EXPORTER_PATH" $(echo "$EXPORTER_OPTS")
 fi
