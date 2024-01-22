@@ -7,7 +7,7 @@ exec "${SNAP}/usr/bin/setpriv" \
     --reuid snap_daemon \
     --regid snap_daemon \
     -- \
-    env MYSQLSH_USER_CONFIG_HOME="/tmp/snap-private-tmp/snap.${SNAP_NAME}/tmp" \
+    env MYSQLSH_USER_CONFIG_HOME="/tmp/snap-private-tmp/snap.${SNAP_NAME}/tmp/mysqlsh" \
     "${SNAP}/usr/bin/mysqlsh" \
     --log-file "${SNAP_COMMON}/var/log/mysqlsh/mysqlsh.log" \
     "$@"
