@@ -40,11 +40,20 @@ def test_all_services():
     with open("snap/snapcraft.yaml") as file:
         snapcraft = yaml.safe_load(file)
 
-        skip = ["mysqlrouter-service", "mysqld-exporter", "mysqlrouter-exporter"]
+        skip = ["mysqlrouter-service", "mysqlrouter-exporter"]
 
         for app, data in snapcraft["apps"].items():
             if bool(data.get("daemon")) and app not in skip:
                 print(f"\nTesting {snapcraft['name']}.{app} service....")
+
+                if app == "mysqld-exporter":
+                    # set a dummy credentials so service can start
+                    for config in ["exporter.user", "exporter.password"]:
+                        subprocess.run(
+                            f"sudo snap set {snapcraft['name']} {config}=dummy".split(),
+                            check=True,
+                        )
+
                 subprocess.run(
                     f"sudo snap start {snapcraft['name']}.{app}".split(), check=True
                 )
