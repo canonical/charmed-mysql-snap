@@ -9,6 +9,11 @@ def test_install():
         snapcraft = yaml.safe_load(file)
 
         subprocess.run(
+            f"sudo snap remove --purge {snapcraft['name']}".split(),
+            check=True,
+        )
+
+        subprocess.run(
             f"sudo snap install ./{snapcraft['name']}_{snapcraft['version']}_amd64.snap --devmode".split(),
             check=True,
         )
@@ -40,17 +45,52 @@ def test_all_services():
     with open("snap/snapcraft.yaml") as file:
         snapcraft = yaml.safe_load(file)
 
-        skip = ["mysqlrouter-service", "mysqlrouter-exporter"]
+        subprocess.run(
+            f"sudo cp tests/templates/mysqlrouter.conf /var/snap/{snapcraft['name']}/current/etc/mysqlrouter/mysqlrouter.conf".split(),
+            check=True,
+        )
+        subprocess.run(
+            f"sudo {snapcraft['name']}.mysqlrouter-passwd set /var/snap/{snapcraft['name']}/current/etc/mysqlrouter/mysqlrouter.pwd user".split(),
+            input="password",
+            encoding="utf-8",
+            check=True,
+        )
+
+        skip = ["mysqlrouter-service"]
+
+        subprocess.run(
+            f"sudo snap start {snapcraft['name']}.mysqlrouter-service".split(),
+            check=True,
+        )
+        time.sleep(5)
+        service = subprocess.run(
+            f"snap services {snapcraft['name']}.mysqlrouter-service".split(),
+            check=True,
+            capture_output=True,
+            encoding="utf-8",
+        )
+        assert "active" == service.stdout.split("\n")[1].split()[2]
+
+        service_configs = {
+            "mysqld-exporter": {
+                "exporter.user": "user",
+                "exporter.password": "password",
+            },
+            "mysqlrouter-exporter": {
+                "mysqlrouter-exporter.user": "user",
+                "mysqlrouter-exporter.password": "password",
+                "mysqlrouter-exporter.url": "http://127.0.0.1:8081",
+            },
+        }
 
         for app, data in snapcraft["apps"].items():
             if bool(data.get("daemon")) and app not in skip:
                 print(f"\nTesting {snapcraft['name']}.{app} service....")
 
-                if app == "mysqld-exporter":
-                    # set a dummy credentials so service can start
-                    for config in ["exporter.user", "exporter.password"]:
+                if app in service_configs:
+                    for config, value in service_configs[app].items():
                         subprocess.run(
-                            f"sudo snap set {snapcraft['name']} {config}=dummy".split(),
+                            f"sudo snap set {snapcraft['name']} {config}={value}".split(),
                             check=True,
                         )
 
