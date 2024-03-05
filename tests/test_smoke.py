@@ -46,7 +46,7 @@ def test_all_services():
         snapcraft = yaml.safe_load(file)
 
         subprocess.run(
-            f"sudo cp tests/templates/mysqlrouter.conf /var/snap/{snapcraft['name']}/current/etc/mysqlrouter/mysqlrouter.conf".split(),
+            f"sudo cp tests/mysqlrouter.conf /var/snap/{snapcraft['name']}/current/etc/mysqlrouter/mysqlrouter.conf".split(),
             check=True,
         )
         subprocess.run(
