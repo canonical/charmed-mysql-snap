@@ -13,4 +13,4 @@ exec "${SNAP}/usr/bin/setpriv" \
     -- \
     "${SNAP}/usr/bin/mysqlrouter" \
     --config "${SNAP_DATA}/etc/mysqlrouter/mysqlrouter.conf" \
-    "${EXTRA_OPTIONS[@]}"
+    ${EXTRA_OPTIONS[@]}
