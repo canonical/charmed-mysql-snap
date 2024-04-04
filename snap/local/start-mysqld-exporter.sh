@@ -24,7 +24,7 @@ if [ -z "$SNAP" ]; then
         exit 1
     fi
     exec env MYSQLD_EXPORTER_PASS="${EXPORTER_PASS}" \
-        "$EXPORTER_PATH" "--mysqld.username=${EXPORTER_USER}" "--mysqld.address=unix(${SOCKET})" "${EXPORTER_OPTS[@]}"
+        "$EXPORTER_PATH" "--mysqld.username=${EXPORTER_USER}" "--mysqld.address=unix://${SOCKET}" "${EXPORTER_OPTS[@]}"
 else
     # When running as a snap, expect `exporter.user` and `exporter.password`
     EXPORTER_USER="$(snapctl get exporter.user)"
@@ -45,5 +45,5 @@ else
         --regid snap_daemon \
         -- \
         env MYSQLD_EXPORTER_PASSWORD="${EXPORTER_PASS}" \
-        "$EXPORTER_PATH" "--mysqld.username=${EXPORTER_USER}" "--mysqld.address=unix(${SOCKET})" "${EXPORTER_OPTS[@]}"
+        "$EXPORTER_PATH" "--mysqld.username=${EXPORTER_USER}" "--mysqld.address=unix://${SOCKET}" "${EXPORTER_OPTS[@]}"
 fi
