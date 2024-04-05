@@ -80,6 +80,7 @@ def test_all_services():
                 "mysqlrouter-exporter.user": "user",
                 "mysqlrouter-exporter.password": "password",
                 "mysqlrouter-exporter.url": "http://127.0.0.1:8081",
+                "mysqlrouter-exporter.service-name": "mysql-router/0",
             },
         }
 

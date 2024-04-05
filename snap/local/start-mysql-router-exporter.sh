@@ -14,71 +14,90 @@ EXPORTER_OPTS=(
 EXPORTER_PATH="/usr/bin/mysqlrouter_exporter"
 
 if [ -n "$SNAP" ]; then
-    EXPORTER_PATH="${SNAP}${EXPORTER_PATH}"
     MYSQLROUTER_EXPORTER_USER="$(snapctl get mysqlrouter-exporter.user)"
     MYSQLROUTER_EXPORTER_PASS="$(snapctl get mysqlrouter-exporter.password)"
     MYSQLROUTER_EXPORTER_URL="$(snapctl get mysqlrouter-exporter.url)"
+    MYSQLROUTER_EXPORTER_SERVICE_NAME="$(snapctl get mysqlrouter-exporter.service-name)"
     MYSQLROUTER_TLS_CACERT_PATH="$(snapctl get mysqlrouter.tls-cacert-path)"
     MYSQLROUTER_TLS_CERT_PATH="$(snapctl get mysqlrouter.tls-cert-path)"
     MYSQLROUTER_TLS_KEY_PATH="$(snapctl get mysqlrouter.tls-key-path)"
+fi
 
-    if [ -z "$MYSQLROUTER_EXPORTER_URL" ]; then
-        echo "mysqlrouter-exporter.url must be set"
-        exit 1
-    fi
-
-    if [[ -z "$MYSQLROUTER_EXPORTER_USER" || -z "$MYSQLROUTER_EXPORTER_PASS" ]]; then
-        echo "mysqlrouter-exporter.user and mysqlrouter-exporter.password must be set"
-        exit 1
-    fi
-
-    if [[ -n "$MYSQLROUTER_TLS_CACERT_PATH" && -n "$MYSQLROUTER_TLS_CERT_PATH" && -n "$MYSQLROUTER_TLS_KEY_PATH" ]]; then
-        # For security measures, daemons should not be run as sudo.
-        # Execute mysqlrouter-exporter as the non-sudo user: snap-daemon.
-        exec "$SNAP"/usr/bin/setpriv \
-            --clear-groups \
-            --reuid snap_daemon \
-            --regid snap_daemon -- \
-            env MYSQLROUTER_EXPORTER_URL="${MYSQLROUTER_EXPORTER_URL}" \
-            MYSQLROUTER_EXPORTER_USER="${MYSQLROUTER_EXPORTER_USER}" \
-            MYSQLROUTER_EXPORTER_PASS="${MYSQLROUTER_EXPORTER_PASS}" \
-            MYSQLROUTER_TLS_CACERT_PATH="${MYSQLROUTER_TLS_CACERT_PATH}" \
-            MYSQLROUTER_TLS_CERT_PATH="${MYSQLROUTER_TLS_CERT_PATH}" \
-            MYSQLROUTER_TLS_KEY_PATH="${MYSQLROUTER_TLS_KEY_PATH}" \
-            "$EXPORTER_PATH" "${EXPORTER_OPTS[@]}"
+# Validate certain required input args
+if [ -z "${MYSQLROUTER_EXPORTER_URL}" ]; then
+    if [ -n "${SNAP}" ]; then
+        echo "Error: mysqlrouter-exporter.url must be set" >&2
     else
-        # For security measures, daemons should not be run as sudo.
-        # Execute mysqlrouter-exporter as the non-sudo user: snap-daemon.
-        exec "$SNAP"/usr/bin/setpriv \
-            --clear-groups \
-            --reuid snap_daemon \
-            --regid snap_daemon -- \
-            env MYSQLROUTER_EXPORTER_URL="${MYSQLROUTER_EXPORTER_URL}" \
-            MYSQLROUTER_EXPORTER_USER="${MYSQLROUTER_EXPORTER_USER}" \
-            MYSQLROUTER_EXPORTER_PASS="${MYSQLROUTER_EXPORTER_PASS}" \
-            "$EXPORTER_PATH" "${EXPORTER_OPTS[@]}" --skip-tls-verify
+        echo "Error: MYSQLROUTER_EXPORTER_URL must be set" >&2
     fi
+    exit 1
+fi
+
+if [ -z "${MYSQLROUTER_EXPORTER_USER}" ]; then
+    if [ -n "${SNAP}" ]; then
+        echo "Error: mysqlrouter-exporter.user must be set" >&2
+    else
+        echo "Error: MYSQLROUTER_EXPORTER_USER must be set" >&2
+    fi
+    exit 1
+fi
+
+if [ -z "${MYSQLROUTER_EXPORTER_PASS}" ]; then
+    if [ -n "${SNAP}" ]; then
+        echo "Error: mysqlrouter-exporter.password must be set" >&2
+    else
+        echo "Error: MYSQLROUTER_EXPORTER_PASS must be set" >&2
+    fi
+    exit 1
+fi
+
+if [ -z "${MYSQLROUTER_EXPORTER_SERVICE_NAME}" ]; then
+    if [ -n "${SNAP}" ]; then
+        echo "Error: mysqlrouter-exporter.service-name must be set" >&2
+    else
+        echo "Error: MYSQLROUTER_EXPORTER_SERVICE_NAME must be set" >&2
+    fi
+    exit 1
+fi
+
+# Execute the mysqlrouter_exporter command 
+if [ -n "${SNAP}" ]; then
+    SETPRIV_OPTIONS=(
+        "--clear-groups"
+        "--reuid"
+        "snap_daemon"
+        "--regid"
+        "snap_daemon"
+    )
+
+    EXPORTER_ENV=(
+        "MYSQLROUTER_EXPORTER_URL=${MYSQLROUTER_EXPORTER_URL}"
+        "MYSQLROUTER_EXPORTER_USER=${MYSQLROUTER_EXPORTER_USER}"
+        "MYSQLROUTER_EXPORTER_PASS=${MYSQLROUTER_EXPORTER_PASS}"
+    )
+
+    EXPORTER_OPTS+=("--service-name=${MYSQLROUTER_SERVICE_NAME}")
+
+    if [[
+        -n "${MYSQLROUTER_TLS_CACERT_PATH}" && \
+        -n "${MYSQLROUTER_TLS_CERT_PATH}" && \
+        -n "${MYSQLROUTER_TLS_KEY_PATH}"
+    ]]; then
+        EXPORTER_ENV+=("MYSQLROUTER_TLS_CACERT_PATH=${MYSQLROUTER_TLS_CACERT_PATH}")
+        EXPORTER_ENV+=("MYSQLROUTER_TLS_CERT_PATH=${MYSQLROUTER_TLS_CERT_PATH}")
+        EXPORTER_ENV+=("MYSQLROUTER_TLS_KEY_PATH=${MYSQLROUTER_TLS_KEY_PATH}")
+    else
+        EXPORTER_OPTS+=("--skip-tls-verify")
+    fi
+
+    # For security measures, daemons should not be run as sudo.
+    # Execute mysqlrouter-exporter as the non-sudo user: snap-daemon.
+    exec "${SNAP}"/usr/bin/setpriv "${SETPRIV_OPTIONS[@]}" -- \
+        env "${EXPORTER_ENV[@]}" "${SNAP}${EXPORTER_PATH}" "${EXPORTER_OPTS[@]}"
 else
-    if [ -z "$MYSQLROUTER_EXPORTER_URL" ]; then
-        echo "MYSQLROUTER_EXPORTER_URL must be set"
-        exit 1
+    if [[ -z "$MYSQLROUTER_TLS_CACERT_PATH" || -z "$MYSQLROUTER_TLS_CERT_PATH" || -z "$MYSQLROUTER_TLS_KEY_PATH" ]]; then
+        EXPORTER_OPTS+=("--skip-tls-verify")
     fi
 
-    if [ -z "$MYSQLROUTER_EXPORTER_USER" ]; then
-        echo "MYSQLROUTER_EXPORTER_USER must be set"
-        exit 1
-    fi
-
-    if [ -z "$MYSQLROUTER_EXPORTER_PASS" ]; then
-        echo "MYSQLROUTER_EXPORTER_PASS must be set"
-        exit 1
-    fi
-
-    if [[ -n "$MYSQLROUTER_TLS_CACERT_PATH" && -n "$MYSQLROUTER_TLS_CERT_PATH" && -n "$MYSQLROUTER_TLS_KEY_PATH" ]]; then
-        TLS_OPTS=""
-    else
-        TLS_OPTS="--skip-tls-verify"
-    fi
-
-    "$EXPORTER_PATH" "${EXPORTER_OPTS[@]}" "$TLS_OPTS"
+    "${EXPORTER_PATH}" "${EXPORTER_OPTS[@]}"
 fi
