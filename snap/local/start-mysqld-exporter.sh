@@ -29,7 +29,7 @@ if [ -z "${EXPORTER_USER}" ] || [ -z "${EXPORTER_PASS}" ]; then
     echo "Error: both EXPORTER_USER and EXPORTER_PASS must be set" >&2
     exit 1
 fi
-DATA_SOURCE_NAME="${EXPORTER_USER}:${EXPORTER_PASS}@unix(${SOCKET})"
+DATA_SOURCE_NAME="${EXPORTER_USER}:${EXPORTER_PASS}@unix(${SOCKET})/"
 
 if [ -z "$SNAP" ]; then
     exec env DATA_SOURCE_NAME="${DATA_SOURCE_NAME}" \
