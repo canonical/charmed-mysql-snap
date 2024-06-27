@@ -8,6 +8,11 @@ description: |
   Server is intended for mission-critical, heavy-load production
   systems as well as for embedding into mass-deployed software.
 
+architectures:
+  - build-on: [amd64]
+    build-for: [amd64]
+  - build-on: [arm64]
+    build-for: [arm64]
 grade: stable # must be 'stable' to release into candidate/stable channels
 confinement: strict # use 'strict' once you have the right plugs and slots
 license: Apache-2.0
