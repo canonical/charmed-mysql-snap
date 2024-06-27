@@ -13,8 +13,8 @@ architectures:
     build-for: [amd64]
   - build-on: [arm64]
     build-for: [arm64]
-grade: stable # must be 'stable' to release into candidate/stable channels
-confinement: strict # use 'strict' once you have the right plugs and slots
+grade: stable
+confinement: strict
 license: Apache-2.0
 
 system-usernames:
