@@ -22,13 +22,6 @@ system-usernames:
 
 package-repositories:
   - type: apt
-    components:
-      - main
-    suites:
-      - jammy
-    key-id: F6ECB3762474EDA9D21B7022871920D1991BC93C
-    url: http://security.ubuntu.com/ubuntu/
-  - type: apt
     ppa: data-platform/mysql-shell
   - type: apt
     ppa: data-platform/xtrabackup
