@@ -1,6 +1,5 @@
 # MySQL Snap
-[![Release](https://github.com/canonical/charmed-mysql-snap/actions/workflows/publish.yaml/badge.svg)](https://github.com/canonical/charmed-mysql-snap/actions/workflows/publish.yaml)
-[![Tests](https://github.com/canonical/charmed-mysql-snap/actions/workflows/tmate.yaml/badge.svg?branch=main)](https://github.com/canonical/charmed-mysql-snap/actions/workflows/tmate.yaml)
+[![Release to Snap Store](https://github.com/canonical/charmed-mysql-snap/actions/workflows/release.yaml/badge.svg)](https://github.com/canonical/charmed-mysql-snap/actions/workflows/release.yaml)
 
 This repository contains the packaging metadata for creating a snap of MySQL built from the official Ubuntu repositories.  For more information on snaps, visit [snapcraft.io](https://snapcraft.io/). 
 
