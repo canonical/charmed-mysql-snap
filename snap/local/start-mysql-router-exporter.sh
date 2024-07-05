@@ -14,6 +14,7 @@ EXPORTER_OPTS=(
 EXPORTER_PATH="/usr/bin/mysqlrouter_exporter"
 
 if [ -n "$SNAP" ]; then
+    MYSQLROUTER_EXPORTER_LISTEN_PORT="$(snapctl get mysqlrouter-exporter.listen-port)"
     MYSQLROUTER_EXPORTER_USER="$(snapctl get mysqlrouter-exporter.user)"
     MYSQLROUTER_EXPORTER_PASS="$(snapctl get mysqlrouter-exporter.password)"
     MYSQLROUTER_EXPORTER_URL="$(snapctl get mysqlrouter-exporter.url)"
@@ -58,6 +59,11 @@ if [ -z "${MYSQLROUTER_EXPORTER_SERVICE_NAME}" ]; then
         echo "Error: MYSQLROUTER_EXPORTER_SERVICE_NAME must be set" >&2
     fi
     exit 1
+fi
+
+# Modify the listen-port if supplied
+if [ -n "${MYSQLROUTER_EXPORTER_LISTEN_PORT}" ]; then
+    EXPORTER_OPTS+=("--listen-port=${MYSQLROUTER_EXPORTER_LISTEN_PORT}")
 fi
 
 # Execute the mysqlrouter_exporter command 
