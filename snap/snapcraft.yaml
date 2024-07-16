@@ -143,6 +143,7 @@ parts:
       usr/share/doc/util-linux/copyright: licenses/COPYRIGHT-util-linux
   audit-plugin:
     plugin: nil
+    after: [packages-deb]
     build-packages:
       - rpm
     build-environment:
