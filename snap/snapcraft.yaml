@@ -160,14 +160,14 @@ parts:
         curl -o file.rpm "${URL}"
         # output a file.rpm.tgz
         rpm2archive file.rpm
-        tar -xf file.rpm.tgz --strip-components 4 --wildcards --no-anchored '*audit_log.so*'
+        tar -xf file.rpm.tgz --strip-components 4 --wildcards --no-anchored '*audit_log*.so*'
       else
         URL=${DIR_URL}/${PATH_AMD64}/${BASE_AMD64}
         curl -o file.tar.gz "${URL}"
-        tar -xf  file.tar.gz --strip-components 2 --wildcards --no-anchored '*audit_log.so*'
+        tar -xf  file.tar.gz --strip-components 2 --wildcards --no-anchored '*audit_log*.so*'
       fi
     override-prime: |
-      cp ${SNAPCRAFT_PART_BUILD}/plugin/audit_log.so ${SNAPCRAFT_PRIME}/usr/lib/mysql/plugin/audit_log.so
+      cp ${SNAPCRAFT_PART_BUILD}/plugin/*.so ${SNAPCRAFT_PRIME}/usr/lib/mysql/plugin/
   snap-license:
     plugin: dump
     source: .
