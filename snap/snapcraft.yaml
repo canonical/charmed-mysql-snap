@@ -153,8 +153,8 @@ parts:
       - DIR_URL: https://downloads.percona.com/downloads/Percona-Server-8.0/Percona-Server-${VERSION}/binary
       - PATH_AMD64: tarball
       - PATH_ARM64: redhat/9/aarch64
+      - LICENSE_URL: https://raw.githubusercontent.com/percona/percona-server/8.0/LICENSE
     override-pull: |
-      # TODO add license file
       if [ "${CRAFT_ARCH_BUILD_FOR}" = "arm64" ]; then
         URL=${DIR_URL}/${PATH_ARM64}/${BASE_ARM64}
         curl -o file.rpm "${URL}"
@@ -166,8 +166,10 @@ parts:
         curl -o file.tar.gz "${URL}"
         tar -xf  file.tar.gz --strip-components 2 --wildcards --no-anchored '*audit_log*.so*'
       fi
+      curl -o LICENSE "${LICENSE_URL}"
     override-prime: |
       cp ${SNAPCRAFT_PART_BUILD}/plugin/*.so ${SNAPCRAFT_PRIME}/usr/lib/mysql/plugin/
+      cp LICENSE ${SNAPCRAFT_PRIME}/licenses/LICENSE-audit-plugin
   snap-license:
     plugin: dump
     source: .
