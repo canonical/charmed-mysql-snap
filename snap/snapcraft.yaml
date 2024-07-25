@@ -169,7 +169,7 @@ parts:
       curl -o LICENSE "${LICENSE_URL}"
     override-prime: |
       cp ${SNAPCRAFT_PART_BUILD}/plugin/*.so ${SNAPCRAFT_PRIME}/usr/lib/mysql/plugin/
-      cp LICENSE ${SNAPCRAFT_PRIME}/licenses/LICENSE-audit-plugin
+      cp ${SNAPCRAFT_PART_BUILD}/LICENSE ${SNAPCRAFT_PRIME}/licenses/LICENSE-audit-plugin
   snap-license:
     plugin: dump
     source: .
