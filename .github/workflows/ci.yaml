@@ -69,7 +69,7 @@ jobs:
       - name: Run tests
         run: tox run -e smoke
 
-  smoke:
+  audit-log-plugin:
     name: Audit log plugin test
     runs-on: ubuntu-latest
     timeout-minutes: 5
