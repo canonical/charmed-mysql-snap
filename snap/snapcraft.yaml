@@ -1,6 +1,6 @@
 name: charmed-mysql
 base: core22
-version: '8.0.37'
+version: '8.0.39'
 summary: MySQL server in a snap.
 description: |
   The MySQL software delivers a very fast, multithreaded, multi-user,
@@ -126,8 +126,8 @@ parts:
   packages-deb:
     plugin: nil
     stage-packages:
-      - mysql-server-8.0=8.0.37-0ubuntu0.22.04.3
-      - mysql-router=8.0.37-0ubuntu0.22.04.3
+      - mysql-server-8.0=8.0.39-0ubuntu0.22.04.3
+      - mysql-router=8.0.39-0ubuntu0.22.04.3
       - mysql-shell=8.0.37+dfsg-0ubuntu0.22.04.1~ppa3
       - prometheus-mysqld-exporter=0.14.0-0ubuntu0.22.04.1~ppa2
       - prometheus-mysqlrouter-exporter=5.0.1-0ubuntu0.22.04.1~ppa1
