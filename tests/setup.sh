@@ -19,6 +19,7 @@ cat <<EOF > ${CURRENT}/etc/mysql/mysql.conf.d/temp_init.cnf
 [mysqld]
 init_file=/var/snap/charmed-mysql/current/etc/mysql/mysql.conf.d/alter_pass.sql
 loose-audit_log_format = JSON
+loose-audit_log_strategy = SYNCHRONOUS
 EOF
 
 
