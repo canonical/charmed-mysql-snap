@@ -14,15 +14,14 @@ def test_install():
     with open("snap/snapcraft.yaml") as file:
         snapcraft = yaml.safe_load(file)
 
-        subprocess.run(
-            f"sudo snap remove --purge {snapcraft['name']}".split(),
-            check=True,
-        )
-
-        subprocess.run(
-            f"sudo snap install ./{snapcraft['name']}_{snapcraft['version']}_amd64.snap --devmode".split(),
-            check=True,
-        )
+    subprocess.run(
+        f"sudo snap remove --purge {snapcraft['name']}".split(),
+        check=True,
+    )
+    subprocess.run(
+        f"sudo snap install ./{snapcraft['name']}_{snapcraft['version']}_amd64.snap --devmode".split(),
+        check=True,
+    )
 
 
 @pytest.mark.run(after="test_install")
