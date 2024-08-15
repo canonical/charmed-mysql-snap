@@ -30,7 +30,7 @@ package-repositories:
   - type: apt
     ppa: data-platform/mysqlrouter-exporter
   - type: apt
-    ppa: data-platform/mysql-archive
+    ppa: data-platform/mysql-archive # needed for libprotobuf32
 
 layout:
   /var/lib/mysql-files:
@@ -130,7 +130,6 @@ parts:
     stage-packages:
       - mysql-server-8.0=8.0.39-0ubuntu0.22.04.1
       - mysql-router=8.0.39-0ubuntu0.22.04.1
-      - libprotobuf32=3.21.12-3ubuntu0.22.04.1~ppa1
       - mysql-shell=8.0.37+dfsg-0ubuntu0.22.04.1~ppa3
       - prometheus-mysqld-exporter=0.14.0-0ubuntu0.22.04.1~ppa2
       - prometheus-mysqlrouter-exporter=5.0.1-0ubuntu0.22.04.1~ppa1
