@@ -29,8 +29,6 @@ package-repositories:
     ppa: data-platform/mysqld-exporter
   - type: apt
     ppa: data-platform/mysqlrouter-exporter
-  - type: apt
-    ppa: data-platform/mysql-archive # needed for libprotobuf32
 
 layout:
   /var/lib/mysql-files:
