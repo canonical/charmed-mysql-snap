@@ -29,6 +29,8 @@ package-repositories:
     ppa: data-platform/mysqld-exporter
   - type: apt
     ppa: data-platform/mysqlrouter-exporter
+  - type: apt
+    ppa: data-platform/percona-server-plugins
 
 layout:
   /var/lib/mysql-files:
@@ -126,12 +128,16 @@ parts:
   packages-deb:
     plugin: nil
     stage-packages:
-      - mysql-server-8.0=8.0.39-0ubuntu0.22.04.1
-      - mysql-router=8.0.39-0ubuntu0.22.04.1
+      - mysql-server-8.0=8.0.40-0ubuntu0.22.04.1
+      - mysql-router=8.0.40-0ubuntu0.22.04.1
       - mysql-shell=8.0.38+dfsg-0ubuntu0.22.04.1~ppa2
       - prometheus-mysqld-exporter=0.14.0-0ubuntu0.22.04.1~ppa2
       - prometheus-mysqlrouter-exporter=5.0.1-0ubuntu0.22.04.1~ppa1
       - percona-xtrabackup=8.0.35-31-0ubuntu0.22.04.1~ppa3
+      - mysql-audit-log-filter-plugin=8.0.39+dfsg-0ubuntu0.22.04.1~ppa6
+      - mysql-audit-log-plugin=8.0.39+dfsg-0ubuntu0.22.04.1~ppa6
+      - mysql-auth-ldap-plugin=8.0.39+dfsg-0ubuntu0.22.04.1~ppa6
+      - mysql-binlog-utils-udf-plugin=8.0.39+dfsg-0ubuntu0.22.04.1~ppa6
       - util-linux
     organize:
       usr/share/doc/mysql-server-8.0/copyright: licenses/COPYRIGHT-mysql-server-8.0
@@ -140,36 +146,11 @@ parts:
       usr/share/doc/prometheus-mysqld-exporter/copyright: licenses/COPYRIGHT-prometheus-mysqld-exporter
       usr/share/doc/prometheus-mysqlrouter-exporter/copyright: licenses/COPYRIGHT-prometheus-mysqlrouter-exporter
       usr/share/doc/percona-xtrabackup/LICENSE.gz: licenses/LICENSE-percona-xtrabackup
+      usr/share/doc/mysql-audit-log-filter-plugin/copyright: licenses/COPYRIGHT-mysql-audit-log-filter-plugin
+      usr/share/doc/mysql-audit-log-plugin/copyright: licenses/COPYRIGHT-mysql-audit-log-plugin
+      usr/share/doc/mysql-auth-ldap-plugin/copyright: licenses/COPYRIGHT-mysql-auth-ldap-plugin
+      usr/share/doc/mysql-binlog-utils-udf-plugin/copyright: licenses/COPYRIGHT-mysql-binlog-utils-udf-plugin
       usr/share/doc/util-linux/copyright: licenses/COPYRIGHT-util-linux
-  audit-plugin:
-    plugin: nil
-    after: [packages-deb]
-    build-packages:
-      - rpm
-    build-environment:
-      - VERSION: 8.0.36-28
-      - BASE_AMD64: Percona-Server-${VERSION}-Linux.x86_64.glibc2.35.tar.gz
-      - BASE_ARM64: percona-server-server-${VERSION}.1.el9.aarch64.rpm
-      - DIR_URL: https://downloads.percona.com/downloads/Percona-Server-8.0/Percona-Server-${VERSION}/binary
-      - PATH_AMD64: tarball
-      - PATH_ARM64: redhat/9/aarch64
-      - LICENSE_URL: https://raw.githubusercontent.com/percona/percona-server/8.0/LICENSE
-    override-pull: |
-      if [ "${CRAFT_ARCH_BUILD_FOR}" = "arm64" ]; then
-        URL=${DIR_URL}/${PATH_ARM64}/${BASE_ARM64}
-        curl -o file.rpm "${URL}"
-        # output a file.rpm.tgz
-        rpm2archive file.rpm
-        tar -xf file.rpm.tgz --strip-components 4 --wildcards --no-anchored '*audit_log*.so*'
-      else
-        URL=${DIR_URL}/${PATH_AMD64}/${BASE_AMD64}
-        curl -o file.tar.gz "${URL}"
-        tar -xf  file.tar.gz --strip-components 2 --wildcards --no-anchored '*audit_log*.so*'
-      fi
-      curl -o LICENSE "${LICENSE_URL}"
-    override-prime: |
-      cp ${SNAPCRAFT_PART_BUILD}/plugin/*.so ${SNAPCRAFT_PRIME}/usr/lib/mysql/plugin/
-      cp ${SNAPCRAFT_PART_BUILD}/LICENSE ${SNAPCRAFT_PRIME}/licenses/LICENSE-audit-plugin
   snap-license:
     plugin: dump
     source: .
