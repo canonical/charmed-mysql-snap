@@ -31,6 +31,8 @@ package-repositories:
     ppa: data-platform/mysqlrouter-exporter
   - type: apt
     ppa: data-platform/percona-server-plugins
+  - type: apt
+    ppa: data-platform/mysql-pitr-helper
 
 layout:
   /var/lib/mysql-files:
@@ -138,6 +140,7 @@ parts:
       - mysql-audit-log-plugin=8.0.39+dfsg-0ubuntu0.22.04.1~ppa6
       - mysql-auth-ldap-plugin=8.0.39+dfsg-0ubuntu0.22.04.1~ppa6
       - mysql-binlog-utils-udf-plugin=8.0.39+dfsg-0ubuntu0.22.04.1~ppa6
+      - mysql-pitr-helper=2-0ubuntu0.22.04.1~ppa1
       - util-linux
     organize:
       usr/share/doc/mysql-server-8.0/copyright: licenses/COPYRIGHT-mysql-server-8.0
@@ -150,6 +153,7 @@ parts:
       usr/share/doc/mysql-audit-log-plugin/copyright: licenses/COPYRIGHT-mysql-audit-log-plugin
       usr/share/doc/mysql-auth-ldap-plugin/copyright: licenses/COPYRIGHT-mysql-auth-ldap-plugin
       usr/share/doc/mysql-binlog-utils-udf-plugin/copyright: licenses/COPYRIGHT-mysql-binlog-utils-udf-plugin
+      usr/share/doc/mysql-pitr-helper/copyright: licenses/COPYRIGHT-mysql-pitr-helper
       usr/share/doc/util-linux/copyright: licenses/COPYRIGHT-util-linux
   snap-license:
     plugin: dump
