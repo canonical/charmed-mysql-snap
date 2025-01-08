@@ -90,6 +90,18 @@ apps:
     command: run-mysqlsh.sh
     plugs:
       - network
+  mysqlbinlog:
+    command: usr/bin/mysqlbinlog
+  mysql-pitr-helper:
+    command: usr/bin/mysql-pitr-helper
+    plugs:
+      - network
+  mysql-pitr-helper-collector:
+    command: start-mysql-pitr-helper-collector.sh
+    daemon: simple
+    install-mode: disable
+    plugs:
+      - network
   mysqlrouter:
     command: run-mysql-router.sh
     plugs:
