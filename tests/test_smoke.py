@@ -21,6 +21,11 @@ def test_install():
             check=True,
         )
 
+        subprocess.run(
+            f"sudo  install -o snap_daemon /dev/null /var/snap/{snapcraft['name']}/common/var/log/mysql/error.log".split(),
+            check=True,
+        )
+
 
 @pytest.mark.run(after="test_install")
 def test_all_apps():
