@@ -100,6 +100,7 @@ apps:
     command: start-mysql-pitr-helper-collector.sh
     daemon: simple
     install-mode: disable
+    restart-delay: 2m
     plugs:
       - network
   mysqlrouter:
