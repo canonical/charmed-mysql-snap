@@ -145,7 +145,7 @@ parts:
     stage-packages:
       - mysql-server-8.0=8.0.41-0ubuntu0.22.04.1
       - mysql-router=8.0.41-0ubuntu0.22.04.1
-      - mysql-shell=8.0.40+dfsg-0ubuntu0.22.04.1~ppa4
+      - mysql-shell=8.0.41+dfsg-0ubuntu0.22.04.1~ppa1
       - prometheus-mysqld-exporter=0.14.0-0ubuntu0.22.04.1~ppa2
       - prometheus-mysqlrouter-exporter=5.0.1-0ubuntu0.22.04.1~ppa1
       - percona-xtrabackup=8.0.35-31-0ubuntu0.22.04.1~ppa3
