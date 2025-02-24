@@ -148,11 +148,11 @@ parts:
       - mysql-shell=8.0.41+dfsg-0ubuntu0.22.04.1~ppa1
       - prometheus-mysqld-exporter=0.14.0-0ubuntu0.22.04.1~ppa2
       - prometheus-mysqlrouter-exporter=5.0.1-0ubuntu0.22.04.1~ppa1
-      - percona-xtrabackup=8.0.35-31-0ubuntu0.22.04.1~ppa3
-      - mysql-audit-log-filter-plugin=8.0.39+dfsg-0ubuntu0.22.04.1~ppa6
-      - mysql-audit-log-plugin=8.0.39+dfsg-0ubuntu0.22.04.1~ppa6
-      - mysql-auth-ldap-plugin=8.0.39+dfsg-0ubuntu0.22.04.1~ppa6
-      - mysql-binlog-utils-udf-plugin=8.0.39+dfsg-0ubuntu0.22.04.1~ppa6
+      - percona-xtrabackup=8.0.35-32-0ubuntu0.22.04.1~ppa1
+      - mysql-audit-log-filter-plugin=8.0.39+dfsg1-0ubuntu0.22.04.2~ppa2
+      - mysql-audit-log-plugin=8.0.39+dfsg1-0ubuntu0.22.04.2~ppa2
+      - mysql-auth-ldap-plugin=8.0.39+dfsg1-0ubuntu0.22.04.2~ppa2
+      - mysql-binlog-utils-udf-plugin=8.0.39+dfsg1-0ubuntu0.22.04.2~ppa2
       - mysql-pitr-helper=2-0ubuntu0.22.04.1~ppa1
       - util-linux
     organize:
