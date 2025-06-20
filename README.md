@@ -18,16 +18,21 @@ The steps outlined below are based on the assumption that you are building the s
 git clone git@github.com:canonical/mysql-server-snap.git
 cd mysql-server-snap
 ```
+
 ### Installing and Configuring Prerequisites
 ```bash
 sudo snap install snapcraft
 sudo snap install lxd
 sudo lxd init --auto
 ```
+
 ### Packing and Installing the Snap
+In order to properly test the confinement of the snap, we must install it using the `--dangerous` flag,
+instead of the `--devmode` one. See snap [installation modes](https://snapcraft.io/docs/install-modes).
+
 ```bash
 snapcraft pack
-sudo snap install ./mysql-server*.charm --devmode
+sudo snap install ./mysql-server*.charm --dangerous
 ```
 
 ## License
