@@ -12,6 +12,8 @@ EXPORTER_OPTS=(
     "--no-collect.perf_schema.indexiowaits"
     "--no-collect.perf_schema.tableiowaits"
     "--no-collect.perf_schema.tablelocks"
+    "--collect.perf_schema.replication_group_members"
+    "--collect.perf_schema.replication_group_member_stats"
     "--no-collect.auto_increment.columns"
 )
 EXPORTER_PATH="/usr/bin/prometheus-mysqld-exporter"
