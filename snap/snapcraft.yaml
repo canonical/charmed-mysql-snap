@@ -13,6 +13,8 @@ architectures:
     build-for: [amd64]
   - build-on: [arm64]
     build-for: [arm64]
+  - build-on: [s390x]
+    build-for: [s390x]
 grade: stable
 confinement: strict
 license: Apache-2.0
@@ -146,8 +148,8 @@ parts:
       - mysql-server-8.0=8.0.42-0ubuntu0.22.04.2
       - mysql-router=8.0.42-0ubuntu0.22.04.2
       - mysql-shell=8.0.42+dfsg-0ubuntu0.22.04.1~ppa1
-      - prometheus-mysqld-exporter=0.14.0-0ubuntu0.22.04.1~ppa2
-      - prometheus-mysqlrouter-exporter=5.0.1-0ubuntu0.22.04.1~ppa1
+      - prometheus-mysqld-exporter=0.14.0-0ubuntu0.22.04.1~ppa3
+      - prometheus-mysqlrouter-exporter=5.0.1-0ubuntu0.22.04.1~ppa2
       - percona-xtrabackup=8.0.35-32-0ubuntu0.22.04.1~ppa1
       - mysql-audit-log-filter-plugin=8.0.39+dfsg1-0ubuntu0.22.04.2~ppa2
       - mysql-audit-log-plugin=8.0.39+dfsg1-0ubuntu0.22.04.2~ppa2
