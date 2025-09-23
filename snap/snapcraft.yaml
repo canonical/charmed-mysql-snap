@@ -1,6 +1,6 @@
 name: charmed-mysql
 base: core22
-version: '8.0.42'
+version: '8.0.43'
 summary: MySQL server in a snap.
 description: |
   The MySQL software delivers a very fast, multithreaded, multi-user,
@@ -145,16 +145,16 @@ parts:
   packages-deb:
     plugin: nil
     stage-packages:
-      - mysql-server-8.0=8.0.42-0ubuntu0.22.04.2
-      - mysql-router=8.0.42-0ubuntu0.22.04.2
-      - mysql-shell=8.0.42+dfsg-0ubuntu0.22.04.1~ppa1
+      - mysql-server-8.0=8.0.43-0ubuntu0.22.04.2
+      - mysql-router=8.0.43-0ubuntu0.22.04.2
+      - mysql-shell=8.0.43+dfsg-0ubuntu0.22.04.1~ppa1
       - prometheus-mysqld-exporter=0.14.0-0ubuntu0.22.04.1~ppa3
       - prometheus-mysqlrouter-exporter=5.0.1-0ubuntu0.22.04.1~ppa2
       - percona-xtrabackup=8.0.35-32-0ubuntu0.22.04.1~ppa1
-      - mysql-audit-log-filter-plugin=8.0.42+dfsg1-0ubuntu0.22.04.1~ppa1
-      - mysql-audit-log-plugin=8.0.42+dfsg1-0ubuntu0.22.04.1~ppa1
-      - mysql-auth-ldap-plugin=8.0.42+dfsg1-0ubuntu0.22.04.1~ppa1
-      - mysql-binlog-utils-udf-plugin=8.0.42+dfsg1-0ubuntu0.22.04.1~ppa1
+      - mysql-audit-log-filter-plugin=8.0.43+dfsg1-0ubuntu0.22.04.1~ppa1
+      - mysql-audit-log-plugin=8.0.43+dfsg1-0ubuntu0.22.04.1~ppa1
+      - mysql-auth-ldap-plugin=8.0.43+dfsg1-0ubuntu0.22.04.1~ppa1
+      - mysql-binlog-utils-udf-plugin=8.0.43+dfsg1-0ubuntu0.22.04.1~ppa1
       - mysql-pitr-helper=2-0ubuntu0.22.04.1~ppa1
       - util-linux
     organize:
