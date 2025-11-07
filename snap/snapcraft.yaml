@@ -15,6 +15,8 @@ architectures:
     build-for: [arm64]
   - build-on: [s390x]
     build-for: [s390x]
+  - build-on: [riscv64]
+    build-for: [riscv64]
 grade: stable
 confinement: strict
 license: Apache-2.0
