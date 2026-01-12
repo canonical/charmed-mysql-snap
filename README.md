@@ -37,6 +37,5 @@ sudo snap install ./charmed-mysql*.charm --dangerous
 
 ## License
 The MySQL Server Snap is free software, distributed under the Apache
-Software License, version 2.0. See
-[LICENSE](https://github.com/canonical/mysql-server-snap/blob/8.0/edge/licenses)
+Software License, version 2.0. See [LICENSE](https://github.com/canonical/mysql-server-snap/blob/8.4/edge/licenses)
 for more information.

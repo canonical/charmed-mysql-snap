@@ -24,7 +24,7 @@ jobs:
 
   check-version:
     name: Check version
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
       - name: Checkout
@@ -35,7 +35,7 @@ jobs:
         run: |
           SNAP_VERSION=$(yq .version snap/snapcraft.yaml)
           sudo apt-get update
-          APT_VERSION=$(apt-cache show mysql-server-8.0 | awk '/Version: /{print $2; exit}')
+          APT_VERSION=$(apt-cache show mysql-server | awk '/Version: /{print $2; exit}')
           APT_VERSION=${APT_VERSION::-17}
           if [ "$SNAP_VERSION" != "$APT_VERSION" ]; then
               echo "VERSION MISMATCH DETECTED"
