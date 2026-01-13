@@ -31,12 +31,14 @@ jobs:
         uses: actions/checkout@v4
       - name: Install yq
         run: sudo snap install yq
+      - name: Update sources
+        run: |
+          sudo add-apt-repository ppa:data-platform/mysql-8.4
+          sudo apt-get update
       - name: Compare versions
         run: |
           SNAP_VERSION=$(yq .version snap/snapcraft.yaml)
-          sudo apt-get update
-          APT_VERSION=$(apt-cache show mysql-server | awk '/Version: /{print $2; exit}')
-          APT_VERSION=${APT_VERSION::-17}
+          APT_VERSION=$(apt-cache show mysql-server | awk '/Version: /{print $2; exit}' | cut --delimiter "-" --fields 1)
           if [ "$SNAP_VERSION" != "$APT_VERSION" ]; then
               echo "VERSION MISMATCH DETECTED"
               echo "Snap version: $SNAP_VERSION"
