@@ -26,8 +26,6 @@ package-repositories:
   - type: apt
     ppa: data-platform/mysql-shell-8.0
   - type: apt
-    ppa: data-platform/xtrabackup
-  - type: apt
     ppa: data-platform/mysqld-exporter
   - type: apt
     ppa: data-platform/mysqlrouter-exporter
@@ -35,6 +33,8 @@ package-repositories:
     ppa: data-platform/mysql-server-plugins-8.0
   - type: apt
     ppa: data-platform/mysql-pitr-helper
+  - type: apt
+    ppa: data-platform/percona-xtrabackup-8.0
 
 layout:
   /var/lib/mysql-files:
