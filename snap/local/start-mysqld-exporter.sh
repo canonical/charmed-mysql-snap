@@ -2,6 +2,7 @@
 
 set -eo pipefail # Exit on error
 
+EXPORTER_PATH="/usr/bin/prometheus-mysqld-exporter"
 EXPORTER_OPTS=(
     "--no-collect.binlog_size"
     "--no-collect.info_schema.processlist"
@@ -16,14 +17,11 @@ EXPORTER_OPTS=(
     "--collect.perf_schema.replication_group_member_stats"
     "--no-collect.auto_increment.columns"
 )
-EXPORTER_PATH="/usr/bin/prometheus-mysqld-exporter"
-SOCKET="/var/run/mysqld/mysqld.sock"
 
 if [ -n "$SNAP" ]; then
     # When running as a snap, expect `exporter.user` and `exporter.password`
     EXPORTER_USER="$(snapctl get exporter.user)"
     EXPORTER_PASS="$(snapctl get exporter.password)"
-    SOCKET="${SNAP_COMMON}${SOCKET}"
 fi
 
 
@@ -31,10 +29,14 @@ if [ -z "${EXPORTER_USER}" ] || [ -z "${EXPORTER_PASS}" ]; then
     echo "Error: both EXPORTER_USER and EXPORTER_PASS must be set" >&2
     exit 1
 fi
-DATA_SOURCE_NAME="${EXPORTER_USER}:${EXPORTER_PASS}@unix(${SOCKET})/"
+
+EXPORTER_OPTS+=(
+    "--mysqld.address=localhost:3306"
+    "--mysqld.username=${EXPORTER_USER}:${EXPORTER_PASS}"
+)
 
 if [ -z "$SNAP" ]; then
-    exec env DATA_SOURCE_NAME="${DATA_SOURCE_NAME}" \
+    exec env \
         "${EXPORTER_PATH}" \
         "${EXPORTER_OPTS[@]}"
 else
@@ -45,7 +47,7 @@ else
         --reuid snap_daemon \
         --regid snap_daemon \
         -- \
-        env DATA_SOURCE_NAME="${DATA_SOURCE_NAME}" \
+        env \
         "${SNAP}${EXPORTER_PATH}" \
         "${EXPORTER_OPTS[@]}"
 fi
