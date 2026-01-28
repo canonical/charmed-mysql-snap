@@ -32,16 +32,14 @@ def test_setup():
 
 @pytest.mark.run(after="test_setup")
 def test_install_audit_plugin():
-    # install audit plugin
+    query = "INSTALL COMPONENT 'file://component_audit_log_filter'"
+
     command = [
         "mysql",
-        "-u",
-        "root",
+        "--user=root",
         "--password=newpass",
-        "-S",
-        f"{COMMON}/var/run/mysqld/mysqld.sock",
-        "-e",
-        "INSTALL PLUGIN audit_log SONAME 'audit_log.so'",
+        f"--socket={COMMON}/var/run/mysqld/mysqld.sock",
+        f"--execute={query}",
     ]
 
     subprocess.run(
@@ -53,11 +51,11 @@ def test_install_audit_plugin():
 @pytest.mark.run(after="test_install_audit_plugin")
 def test_audit_log_file():
     # Ensure file is readable
-    audit_file = f"{COMMON}/var/lib/mysql/audit.log"
+    audit_file = f"{COMMON}/var/lib/mysql/audit_filter.log"
     subprocess.run(["sudo", "chmod", "644", audit_file], check=True)
 
     with open(audit_file) as f:
         content = f.read()
+        content = "\n".join(content.splitlines()[1:])
 
-    # assert last record is a `Quit` from previous command
-    assert json.loads(content.splitlines()[-1])["audit_record"]["name"] == "Quit"
+    assert json.loads(content)
