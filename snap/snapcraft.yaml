@@ -88,6 +88,8 @@ apps:
     plugs:
       - network
       - network-bind
+  mysqld-initialize:
+    command: initialize-mysqld.sh
   mysqlsh:
     command: run-mysqlsh.sh
     plugs:
