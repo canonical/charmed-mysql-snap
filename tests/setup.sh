@@ -21,6 +21,8 @@ EOF
 
 chown -R snap_daemon ${CURRENT}/etc/mysql/mysql.conf.d/*
 
+charmed-mysql.mysqld-initialize
+
 snap start charmed-mysql.mysqld
 sleep 2
 snap restart charmed-mysql.mysqld
