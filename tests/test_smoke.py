@@ -37,7 +37,7 @@ def test_all_apps():
             "xtrabackup": "--version",
         }
 
-        sudo = ["mysqlrouter", "mysqlsh", "mysqlrouter-passwd"]
+        sudo = ["mysqlrouter", "mysqlsh", "mysqlrouter-passwd", "mysqld-initialize"]
         # pitr helper requires s3 credentials
         skip = ["mysql-pitr-helper"]
 
@@ -82,6 +82,11 @@ def test_all_services():
         )
 
         skip = ["mysqlrouter-service", "mysql-pitr-helper-collector"]
+
+        subprocess.run(
+            f"sudo charmed-mysql.mysqld-initialize --datadir /var/snap/{snapcraft['name']}/common/var/lib/mysql".split(),
+            check=True,
+        )
 
         subprocess.run(
             f"sudo snap start {snapcraft['name']}.mysqlrouter-service".split(),
