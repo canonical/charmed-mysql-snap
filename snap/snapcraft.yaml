@@ -157,7 +157,7 @@ parts:
       - mysql-audit-log-plugin=8.0.45+ds-0ubuntu0.22.04.1~ppa1
       - mysql-auth-ldap-plugin=8.0.45+ds-0ubuntu0.22.04.1~ppa1
       - mysql-binlog-utils-udf-plugin=8.0.45+ds-0ubuntu0.22.04.1~ppa1
-      - mysql-pitr-helper=6-0ubuntu0.22.04.1
+      - mysql-pitr-helper=2-0ubuntu0.22.04.1~ppa1
       - util-linux
     organize:
       usr/share/doc/mysql-server/copyright: licenses/COPYRIGHT-mysql-server
