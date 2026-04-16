@@ -13,14 +13,19 @@ jobs:
   lint:
     name: Lint
     uses: canonical/data-platform-workflows/.github/workflows/lint_workflows.yaml@v48.1.1
+    permissions:
+      contents: read
 
   check-version:
     name: Check version
     runs-on: ubuntu-24.04
     timeout-minutes: 15
+    permissions: {}
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          persist-credentials: false
       - name: Install yq
         run: sudo snap install yq
       - name: Update sources
@@ -41,11 +46,15 @@ jobs:
   build:
     name: Build snap
     uses: canonical/data-platform-workflows/.github/workflows/build_snap.yaml@v48.1.1
+    permissions:
+      actions: read
+      contents: read
 
   smoke:
     name: Smoke test snap
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    permissions: {}
     needs:
       - lint
       - check-version
@@ -53,6 +62,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          persist-credentials: false
       - name: Install tox
         run: pipx install tox
       - name: Download snap package(s)
@@ -67,6 +78,7 @@ jobs:
     name: Audit log plugin test
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    permissions: {}
     needs:
       - lint
       - check-version
@@ -74,6 +86,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          persist-credentials: false
       - name: Install tox
         run: pipx install tox
       - name: Download snap package(s)
