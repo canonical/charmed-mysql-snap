@@ -118,7 +118,7 @@ apps:
       - network
       - network-bind
   xtrabackup:
-    command: usr/bin/xtrabackup
+    command: run-xtrabackup.sh
   xbcloud:
     command: usr/bin/xbcloud
     plugs:
