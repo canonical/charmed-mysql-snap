@@ -120,11 +120,11 @@ apps:
   xtrabackup:
     command: run-xtrabackup.sh
   xbcloud:
-    command: usr/bin/xbcloud
+    command: run-xbcloud.sh
     plugs:
       - network
   xbstream:
-    command: usr/bin/xbstream
+    command: run-xbstream.sh
   mysqld-exporter:
     command: start-mysqld-exporter.sh
     daemon: simple

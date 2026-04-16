@@ -37,7 +37,15 @@ def test_all_apps():
             "xtrabackup": "--version",
         }
 
-        sudo = ["mysqlrouter", "mysqlsh", "mysqlrouter-passwd", "mysqld-initialize"]
+        sudo = [
+            "mysqlrouter",
+            "mysqlsh",
+            "mysqlrouter-passwd",
+            "mysqld-initialize",
+            "xtrabackup",
+            "xbcloud",
+            "xbstream",
+        ]
         # pitr helper requires s3 credentials
         skip = ["mysql-pitr-helper"]
 
