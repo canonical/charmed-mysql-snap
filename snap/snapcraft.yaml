@@ -1,5 +1,5 @@
 name: charmed-mysql
-base: core24
+base: core26
 version: '8.4.8'
 summary: MySQL server in a snap.
 description: |
@@ -21,17 +21,7 @@ system-usernames:
 
 package-repositories:
   - type: apt
-    ppa: data-platform/mysql-8.4
-  - type: apt
-    ppa: data-platform/mysql-shell-8.4
-  - type: apt
-    ppa: data-platform/mysqld-exporter
-  - type: apt
-    ppa: data-platform/mysqlrouter-exporter
-  - type: apt
     ppa: data-platform/mysql-server-plugins-8.4
-  - type: apt
-    ppa: data-platform/percona-xtrabackup-8.4
 
 layout:
   /var/lib/mysql-files:
@@ -133,16 +123,16 @@ parts:
   packages-deb:
     plugin: nil
     stage-packages:
-      - mysql-server=8.4.8-0ubuntu0.24.04.1~ppa1
-      - mysql-router=8.4.8-0ubuntu0.24.04.1~ppa1
-      - mysql-shell=8.4.8+dfsg-0ubuntu0.24.04.1~ppa1
-      - prometheus-mysqld-exporter=0.16.0-0ubuntu0.24.04.1~ppa3
-      - prometheus-mysqlrouter-exporter=6.0.0-0ubuntu0.24.04.1~ppa1
-      - percona-xtrabackup=8.4.0-5-0ubuntu0.24.04.1~ppa1
-      - mysql-audit-log-filter-plugin=8.4.7+ds-0ubuntu0.24.04.3~ppa1
-      - mysql-audit-log-plugin=8.4.7+ds-0ubuntu0.24.04.3~ppa1
-      - mysql-auth-ldap-plugin=8.4.7+ds-0ubuntu0.24.04.3~ppa1
-      - mysql-binlog-utils-udf-plugin=8.4.7+ds-0ubuntu0.24.04.3~ppa1
+      - mysql-server=8.4.8-0ubuntu1
+      - mysql-router=8.4.8-0ubuntu1
+      - mysql-shell=8.4.8+dfsg-0ubuntu1
+      - prometheus-mysqld-exporter=0.18.0-1
+      - prometheus-mysqlrouter-exporter=6.0.1-1
+      - percona-xtrabackup=8.4.0-5-0ubuntu1
+      - mysql-audit-log-filter-plugin=8.4.8+ds-0ubuntu0.26.04.1~ppa1
+      - mysql-audit-log-plugin=8.4.8+ds-0ubuntu0.26.04.1~ppa1
+      - mysql-auth-ldap-plugin=8.4.8+ds-0ubuntu0.26.04.1~ppa1
+      - mysql-binlog-utils-udf-plugin=8.4.8+ds-0ubuntu0.26.04.1~ppa1
       - util-linux
     organize:
       usr/share/doc/mysql-server/copyright: licenses/COPYRIGHT-mysql-server
