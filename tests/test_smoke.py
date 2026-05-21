@@ -46,8 +46,7 @@ def test_all_apps():
             "xbcloud",
             "xbstream",
         ]
-        # pitr helper requires s3 credentials
-        skip = ["mysql-pitr-helper"]
+        skip = []
 
         for app, data in snapcraft["apps"].items():
             if not bool(data.get("daemon")) and app not in skip:
@@ -89,7 +88,7 @@ def test_all_services():
             check=True,
         )
 
-        skip = ["mysqlrouter-service", "mysql-pitr-helper-collector"]
+        skip = ["mysqlrouter-service"]
 
         subprocess.run(
             f"sudo charmed-mysql.mysqld-initialize --datadir /var/snap/{snapcraft['name']}/common/var/lib/mysql".split(),
