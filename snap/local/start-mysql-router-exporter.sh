@@ -11,7 +11,7 @@ EXPORTER_OPTS=(
     "--collect.route.connections.time_last_sent_to_server"
     "--collect.route.connections.time_received_from_server"
 )
-EXPORTER_PATH="/usr/bin/mysqlrouter_exporter"
+EXPORTER_PATH="/usr/bin/prometheus-mysqlrouter-exporter"
 
 if [ -n "$SNAP" ]; then
     MYSQLROUTER_EXPORTER_LISTEN_PORT="$(snapctl get mysqlrouter-exporter.listen-port)"
@@ -66,7 +66,7 @@ if [ -n "${MYSQLROUTER_EXPORTER_LISTEN_PORT}" ]; then
     EXPORTER_OPTS+=("--listen-port=${MYSQLROUTER_EXPORTER_LISTEN_PORT}")
 fi
 
-# Execute the mysqlrouter_exporter command 
+# Execute the prometheus-mysqlrouter-exporter command 
 if [ -n "${SNAP}" ]; then
     SETPRIV_OPTIONS=(
         "--clear-groups"
@@ -82,7 +82,7 @@ if [ -n "${SNAP}" ]; then
         "MYSQLROUTER_EXPORTER_PASS=${MYSQLROUTER_EXPORTER_PASS}"
     )
 
-    EXPORTER_OPTS+=("--service-name=${MYSQLROUTER_SERVICE_NAME}")
+    EXPORTER_OPTS+=("--service-name=${MYSQLROUTER_EXPORTER_SERVICE_NAME}")
 
     if [[
         -n "${MYSQLROUTER_TLS_CACERT_PATH}" && \
