@@ -16,36 +16,35 @@ jobs:
     permissions:
       contents: read
 
-  check-version:
-    name: Check version
-    runs-on: ubuntu-24.04
-    timeout-minutes: 15
-    permissions: {}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-        with:
-          persist-credentials: false
-      - name: Install yq
-        run: sudo snap install yq
-      - name: Update sources
-        run: |
-          sudo add-apt-repository ppa:data-platform/mysql-8.4
-          sudo apt-get update
-      - name: Compare versions
-        run: |
-          SNAP_VERSION=$(yq .version snap/snapcraft.yaml)
-          APT_VERSION=$(apt-cache show mysql-server | awk '/Version: /{print $2; exit}' | cut --delimiter "-" --fields 1)
-          if [ "$SNAP_VERSION" != "$APT_VERSION" ]; then
-              echo "VERSION MISMATCH DETECTED"
-              echo "Snap version: $SNAP_VERSION"
-              echo "APT version: $APT_VERSION"
-              exit 1
-          fi
+#  TODO: Uncomment when GitHub offers 26.04 runners
+#  check-version:
+#    name: Check version
+#    runs-on: ubuntu-26.04
+#    timeout-minutes: 15
+#    permissions: {}
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v6
+#        with:
+#          persist-credentials: false
+#      - name: Install yq
+#        run: sudo snap install yq
+#      - name: Compare versions
+#        run: |
+#          SNAP_VERSION=$(yq .version snap/snapcraft.yaml)
+#          APT_VERSION=$(apt-cache show mysql-server | awk '/Version: /{print $2; exit}' | cut --delimiter "-" --fields 1)
+#          if [ "$SNAP_VERSION" != "$APT_VERSION" ]; then
+#              echo "VERSION MISMATCH DETECTED"
+#              echo "Snap version: $SNAP_VERSION"
+#              echo "APT version: $APT_VERSION"
+#              exit 1
+#          fi
 
   build:
     name: Build snap
     uses: canonical/data-platform-workflows/.github/workflows/build_snap.yaml@v48.1.1
+    with:
+      snapcraft-snap-channel: latest/edge
     permissions:
       actions: read
       contents: read
@@ -57,7 +56,7 @@ jobs:
     permissions: {}
     needs:
       - lint
-      - check-version
+      # - check-version
       - build
     steps:
       - name: Checkout
@@ -81,7 +80,7 @@ jobs:
     permissions: {}
     needs:
       - lint
-      - check-version
+      # - check-version
       - build
     steps:
       - name: Checkout
