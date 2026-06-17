@@ -2,26 +2,17 @@
 # See LICENSE file for licensing details.
 name: Tests
 
-permissions:
-  contents: read
-
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 on:
   pull_request:
-  # Triggered on push by .github/workflows/release.yaml
-  workflow_call:
-    outputs:
-      artifact-prefix:
-        description: build_snap.yaml `artifact-prefix` output
-        value: ${{ jobs.build.outputs.artifact-prefix }}
 
 jobs:
   lint-workflows:
     name: Lint .github/workflows/
-    uses: canonical/data-platform-workflows/.github/workflows/lint_workflows.yaml@v49.0.3
+    uses: canonical/data-platform-workflows/.github/workflows/lint_workflows.yaml@v49
     permissions:
       contents: read
 
@@ -29,6 +20,7 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    permissions: {}
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -40,14 +32,12 @@ jobs:
           pipx install poetry
       - name: tox run -e lint
         run: tox run -e lint
-    permissions: {}
 
   check-version:
     name: Check version
     runs-on: ubuntu-22.04
     timeout-minutes: 15
-    permissions:
-      contents: read
+    permissions: {}
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -70,7 +60,7 @@ jobs:
 
   build:
     name: Build snap
-    uses: canonical/data-platform-workflows/.github/workflows/build_snap.yaml@v49.0.3
+    uses: canonical/data-platform-workflows/.github/workflows/build_snap.yaml@v49
     permissions:
       actions: read  # Needed for GitHub API call to get workflow version
       contents: read
@@ -79,6 +69,7 @@ jobs:
     name: Smoke test snap
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    permissions: {}
     needs:
       - lint-workflows
       - lint
@@ -99,13 +90,12 @@ jobs:
           merge-multiple: true
       - name: Run tests
         run: tox run -e smoke
-    permissions:
-      contents: read
 
   audit-log-plugin:
     name: Audit log plugin test
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    permissions: {}
     needs:
       - lint-workflows
       - lint
@@ -126,5 +116,3 @@ jobs:
           merge-multiple: true
       - name: Run tests
         run: tox run -e audit_log
-    permissions:
-      contents: read
