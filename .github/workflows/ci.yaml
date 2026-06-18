@@ -10,17 +10,39 @@ on:
   pull_request:
 
 jobs:
+  lint-workflows:
+    name: Lint .github/workflows/
+    uses: canonical/data-platform-workflows/.github/workflows/lint_workflows.yaml@v49
+    permissions:
+      contents: read
+
   lint:
     name: Lint
-    uses: canonical/data-platform-workflows/.github/workflows/lint_workflows.yaml@v46.0.0
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions: {}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Install tox & poetry
+        run: |
+          pipx install tox
+          pipx install poetry
+      - name: tox run -e lint
+        run: tox run -e lint
 
   check-version:
     name: Check version
     runs-on: ubuntu-22.04
     timeout-minutes: 15
+    permissions: {}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
       - name: Install yq
         run: sudo snap install yq
       - name: Compare versions
@@ -38,23 +60,31 @@ jobs:
 
   build:
     name: Build snap
-    uses: canonical/data-platform-workflows/.github/workflows/build_snap.yaml@v46.0.0
+    uses: canonical/data-platform-workflows/.github/workflows/build_snap.yaml@v49
+    permissions:
+      actions: read  # Needed for GitHub API call to get workflow version
+      contents: read
 
   smoke:
     name: Smoke test snap
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    permissions: {}
     needs:
+      - lint-workflows
       - lint
       - check-version
       - build
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
       - name: Install tox
-        run: pipx install tox
+        run: |
+          pipx install tox
       - name: Download snap package(s)
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           pattern: ${{ needs.build.outputs.artifact-prefix }}-*
           merge-multiple: true
@@ -65,17 +95,22 @@ jobs:
     name: Audit log plugin test
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    permissions: {}
     needs:
+      - lint-workflows
       - lint
       - check-version
       - build
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
       - name: Install tox
-        run: pipx install tox
+        run: |
+          pipx install tox
       - name: Download snap package(s)
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           pattern: ${{ needs.build.outputs.artifact-prefix }}-*
           merge-multiple: true
