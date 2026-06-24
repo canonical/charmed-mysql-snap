@@ -45,6 +45,8 @@ jobs:
           persist-credentials: false
       - name: Install yq
         run: sudo snap install yq
+      - name: Update package metadata
+        run: sudo apt update
       - name: Compare versions
         run: |
           SNAP_VERSION=$(yq .version snap/snapcraft.yaml)
