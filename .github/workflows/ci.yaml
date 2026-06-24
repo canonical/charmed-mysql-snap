@@ -10,11 +10,28 @@ on:
   pull_request:
 
 jobs:
-  lint:
-    name: Lint
+  lint-workflows:
+    name: Lint .github/workflows/
     uses: canonical/data-platform-workflows/.github/workflows/lint_workflows.yaml@v49
     permissions:
       contents: read
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions: {}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Install tox & poetry
+        run: |
+          pipx install tox
+          pipx install poetry
+      - name: tox run -e lint
+        run: tox run -e lint
 
   check-version:
     name: Check version
@@ -52,6 +69,7 @@ jobs:
     timeout-minutes: 5
     permissions: {}
     needs:
+      - lint-workflows
       - lint
       - check-version
       - build
@@ -76,6 +94,7 @@ jobs:
     timeout-minutes: 5
     permissions: {}
     needs:
+      - lint-workflows
       - lint
       - check-version
       - build
