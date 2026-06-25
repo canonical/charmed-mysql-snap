@@ -1,6 +1,6 @@
 name: charmed-mysql
 base: core26
-version: '8.4.9'
+version: '8.4.10'
 summary: MySQL server in a snap.
 description: |
   The MySQL software delivers a very fast, multithreaded, multi-user,
@@ -20,6 +20,8 @@ system-usernames:
   snap_daemon: shared
 
 package-repositories:
+  - type: apt
+    ppa: data-platform/mysql-shell-8.4
   - type: apt
     ppa: data-platform/mysql-server-plugins-8.4
 
@@ -123,9 +125,9 @@ parts:
   packages-deb:
     plugin: nil
     stage-packages:
-      - mysql-server=8.4.9-0ubuntu0.26.04.1
-      - mysql-router=8.4.9-0ubuntu0.26.04.1
-      - mysql-shell=8.4.8+dfsg-0ubuntu1
+      - mysql-server=8.4.10-0ubuntu0.26.04.1
+      - mysql-router=8.4.10-0ubuntu0.26.04.1
+      - mysql-shell=8.4.10+dfsg-0ubuntu0.26.04.1~ppa1
       - prometheus-mysqld-exporter=0.18.0-1
       - prometheus-mysqlrouter-exporter=6.0.1-1
       - percona-xtrabackup=8.4.0-5-0ubuntu1
