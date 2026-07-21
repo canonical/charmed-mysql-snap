@@ -10,122 +10,108 @@ on:
   pull_request:
 
 jobs:
-  promote:
-    name: Promote snaps
-    uses: canonical/data-platform-workflows/.github/workflows/_promote_snaps.yaml@sinclert/10694/promote-snaps
-    with:
-      track: '8.0'
-      from-risk: edge
-      to-risk: beta
-      path-to-snap-directory: snap
-    secrets:
-      snap-store-token: ${{ secrets.SNAP_STORE_TOKEN }}
+  lint-workflows:
+    name: Lint .github/workflows/
+    uses: canonical/data-platform-workflows/.github/workflows/lint_workflows.yaml@v50
     permissions:
-      actions: read
-      contents: write  # Needed to edit GitHub releases
+      contents: read
 
-#  lint-workflows:
-#    name: Lint .github/workflows/
-#    uses: canonical/data-platform-workflows/.github/workflows/lint_workflows.yaml@v50
-#    permissions:
-#      contents: read
-#
-#  lint:
-#    name: Lint
-#    runs-on: ubuntu-latest
-#    timeout-minutes: 5
-#    permissions: {}
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v6
-#        with:
-#          persist-credentials: false
-#      - name: Install tox & poetry
-#        run: |
-#          pipx install tox
-#          pipx install poetry
-#      - name: tox run -e lint
-#        run: tox run -e lint
-#
-#  check-version:
-#    name: Check version
-#    runs-on: ubuntu-22.04
-#    timeout-minutes: 15
-#    permissions: {}
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v6
-#        with:
-#          persist-credentials: false
-#      - name: Install yq
-#        run: sudo snap install yq
-#      - name: Compare versions
-#        run: |
-#          SNAP_VERSION=$(yq .version snap/snapcraft.yaml)
-#          sudo apt-get update
-#          APT_VERSION=$(apt-cache show mysql-server-8.0 | awk '/Version: /{print $2; exit}')
-#          APT_VERSION=${APT_VERSION::-17}
-#          if [ "$SNAP_VERSION" != "$APT_VERSION" ]; then
-#              echo "VERSION MISMATCH DETECTED"
-#              echo "Snap version: $SNAP_VERSION"
-#              echo "APT version: $APT_VERSION"
-#              exit 1
-#          fi
-#
-#  build:
-#    name: Build snap
-#    uses: canonical/data-platform-workflows/.github/workflows/build_snap.yaml@v50
-#    permissions:
-#      contents: read
-#
-#  smoke:
-#    name: Smoke test snap
-#    runs-on: ubuntu-latest
-#    timeout-minutes: 5
-#    permissions: {}
-#    needs:
-#      - lint-workflows
-#      - lint
-#      - check-version
-#      - build
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v6
-#        with:
-#          persist-credentials: false
-#      - name: Install tox
-#        run: |
-#          pipx install tox
-#      - name: Download snap package(s)
-#        uses: actions/download-artifact@v8
-#        with:
-#          pattern: ${{ needs.build.outputs.artifact-prefix }}-*
-#          merge-multiple: true
-#      - name: Run tests
-#        run: tox run -e smoke
-#
-#  audit-log-plugin:
-#    name: Audit log plugin test
-#    runs-on: ubuntu-latest
-#    timeout-minutes: 5
-#    permissions: {}
-#    needs:
-#      - lint-workflows
-#      - lint
-#      - check-version
-#      - build
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v6
-#        with:
-#          persist-credentials: false
-#      - name: Install tox
-#        run: |
-#          pipx install tox
-#      - name: Download snap package(s)
-#        uses: actions/download-artifact@v8
-#        with:
-#          pattern: ${{ needs.build.outputs.artifact-prefix }}-*
-#          merge-multiple: true
-#      - name: Run tests
-#        run: tox run -e audit_log
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions: {}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Install tox & poetry
+        run: |
+          pipx install tox
+          pipx install poetry
+      - name: tox run -e lint
+        run: tox run -e lint
+
+  check-version:
+    name: Check version
+    runs-on: ubuntu-22.04
+    timeout-minutes: 15
+    permissions: {}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Install yq
+        run: sudo snap install yq
+      - name: Compare versions
+        run: |
+          SNAP_VERSION=$(yq .version snap/snapcraft.yaml)
+          sudo apt-get update
+          APT_VERSION=$(apt-cache show mysql-server-8.0 | awk '/Version: /{print $2; exit}')
+          APT_VERSION=${APT_VERSION::-17}
+          if [ "$SNAP_VERSION" != "$APT_VERSION" ]; then
+              echo "VERSION MISMATCH DETECTED"
+              echo "Snap version: $SNAP_VERSION"
+              echo "APT version: $APT_VERSION"
+              exit 1
+          fi
+
+  build:
+    name: Build snap
+    uses: canonical/data-platform-workflows/.github/workflows/build_snap.yaml@v50
+    permissions:
+      contents: read
+
+  smoke:
+    name: Smoke test snap
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions: {}
+    needs:
+      - lint-workflows
+      - lint
+      - check-version
+      - build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Install tox
+        run: |
+          pipx install tox
+      - name: Download snap package(s)
+        uses: actions/download-artifact@v8
+        with:
+          pattern: ${{ needs.build.outputs.artifact-prefix }}-*
+          merge-multiple: true
+      - name: Run tests
+        run: tox run -e smoke
+
+  audit-log-plugin:
+    name: Audit log plugin test
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions: {}
+    needs:
+      - lint-workflows
+      - lint
+      - check-version
+      - build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Install tox
+        run: |
+          pipx install tox
+      - name: Download snap package(s)
+        uses: actions/download-artifact@v8
+        with:
+          pattern: ${{ needs.build.outputs.artifact-prefix }}-*
+          merge-multiple: true
+      - name: Run tests
+        run: tox run -e audit_log
