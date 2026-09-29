@@ -88,6 +88,10 @@ apps:
     command: run-mysqlsh.sh
     plugs:
       - network
+  mysqladmin:
+    command: usr/bin/mysqladmin
+    plugs:
+      - network
   mysqlbinlog:
     command: usr/bin/mysqlbinlog
   mysqlrouter:
