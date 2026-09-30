@@ -33,6 +33,7 @@ def test_all_apps():
         snapcraft = yaml.safe_load(file)
 
         override = {
+            "mysqladmin": "--version",
             "mysqlrouter": "--version",
             "xtrabackup": "--version",
         }

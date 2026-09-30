@@ -99,6 +99,10 @@ apps:
     command: run-mysqlsh.sh
     plugs:
       - network
+  mysqladmin:
+    command: usr/bin/mysqladmin
+    plugs:
+      - network
   mysqlbinlog:
     command: usr/bin/mysqlbinlog
   mysql-pitr-helper:
@@ -152,8 +156,8 @@ parts:
   packages-deb:
     plugin: nil
     stage-packages:
-      - mysql-server=8.0.46-0ubuntu0.22.04.3
-      - mysql-router=8.0.46-0ubuntu0.22.04.3
+      - mysql-server=8.0.46-0ubuntu0.22.04.4
+      - mysql-router=8.0.46-0ubuntu0.22.04.4
       - mysql-shell=8.0.46+dfsg-0ubuntu0.22.04.1~ppa1
       - prometheus-mysqld-exporter=0.14.0-0ubuntu0.22.04.1~ppa3
       - prometheus-mysqlrouter-exporter=5.0.1-0ubuntu0.22.04.1~ppa2
