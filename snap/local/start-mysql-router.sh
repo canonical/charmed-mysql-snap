@@ -1,4 +1,6 @@
 #!/bin/bash
+set -eu
+
 
 # For security measures, daemons should not be run as sudo.
 # Execute mysqlrouter as the non-sudo user: snap-daemon.

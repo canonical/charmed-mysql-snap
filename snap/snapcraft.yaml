@@ -40,7 +40,7 @@ layout:
   /etc/mysqlrouter:
     symlink: $SNAP_DATA/etc/mysqlrouter
   /var/lib/mysqlrouter:
-    symlink: $SNAP_DATA/var/lib/mysqlrouter
+    symlink: $SNAP_COMMON/var/lib/mysqlrouter
   /var/log/mysqlrouter:
     symlink: $SNAP_COMMON/var/log/mysqlrouter
   /var/log/mysqlsh:
